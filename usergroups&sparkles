@@ -1,0 +1,67 @@
+(function() {
+  sparkle(4, 15); // adds sparkles to the group ids
+              // [ex. sparkle(1, 2, 3)]
+  
+  window.user_groups = {
+    /* Template
+    Group_Name: {
+      id: '0', // number in the url of group page
+      class: 'name', // shortened version of the group name ( 1 word )
+      hex_color: '#', // self fuckin explanatory
+    }
+    */
+    
+    Council_Members: {
+      id: '15',
+      class: 'council',
+      hex_color: '#FF7700'
+    },
+    
+    Prestige_Members: {
+      id: '4',
+      class: 'prestige',
+      hex_color: '#0066FF'
+    },
+    
+    Official_Members: {
+      id: '3',
+      class: 'member',
+      hex_color: '#00CCFF'
+    },
+    
+    Unofficial_Members: {
+      id: '13',
+      class: 'unofficial',
+      hex_color: '#99CCFF'
+    },
+    
+    Veterans: {
+      id: '11',
+      class: 'veteran',
+      hex_color: '#007700'
+    },
+    
+    Non_Members: {
+      id: '8',
+      class: 'nonmember',
+      hex_color: '#999999'
+    }
+  };
+  
+  function sparkle() {
+    var args = [].slice.call(arguments),
+        s = '';
+      
+    $(function() {
+      for (var u in user_groups) {
+        for (var i = 0; i < args.length; i++) {
+          if (user_groups[u].id == args[i].toString()) {
+            s += '#chatbox_members li span[style="color: ' + user_groups[u].hex_color + '"],#wio_groups a[href^="/g' + user_groups[u].id + '-"],a[href] span[style="color:' + user_groups[u].hex_color + '"] strong{background-image:url(https://i.servimg.com/u/f62/19/72/25/04/sparkl10.gif)!important}';
+          }
+        }
+      }
+      
+      $('head').append('<style type="text/css" name="sparkle-css">' + s + '</style>');
+    });
+  }
+})();
