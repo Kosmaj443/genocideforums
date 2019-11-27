@@ -1,0 +1,615 @@
+// Table of Contents
+/*
+ * 01 - WIO Functions
+ * 02 - Chatbox AutoLogin
+ * 03 - Group Members Preview
+ * 04 - Linklist Preview
+ * 05 - Sublevel Topics
+ * 06 - Forum Actions Tooltipsters
+ * 07 - Quick Create New Topic
+ * 08 - 
+ * 09 - 
+*/
+
+/* 01 - WIO Functions */
+function wio_formatGroups() {
+  var groups = document.getElementById('wio_groups');
+  if (groups) {
+    for (var a = groups.getElementsByTagName('A'), i = 0, j = a.length, rgb, color; i < j; i++) {
+      color = a[i].style.color;
+      rgb = color.replace(/rgb\(|\)|\s/g, '').split(',');
+      a[i].style.backgroundColor = color;
+      a[i].style.color = /* '#FFF' */ Math.round(((parseInt(rgb[0]) * 299) + (parseInt(rgb[1]) * 587) + (parseInt(rgb[2]) * 114)) / 1000) > 125 ? '#000' : '#FFF'
+    }
+  }
+};
+
+function wio_getStats() {
+  var storage = window.localStorage,
+    stats;
+  if (storage && window.JSON) {
+    if (storage.fa_wio_stats && storage.fa_wio_stats_exp > +new Date - 1 * 60 * 60 * 1000) {
+      wio_applyStats(JSON.parse(storage.fa_wio_stats))
+    } else {
+      $.get('/popup_help.forum?l=miscvars', function(d) {
+        var li = stats = {
+            total_topics: $('li:contains({FORUMCOUNTOPIC})', d)[0],
+            board_age: $('li:contains({FORUMAGE})', d)[0]
+          },
+          i;
+        for (i in stats) {
+          if (stats[i]) {
+            stats[i] = '<strong>' + stats[i].innerHTML.replace(/.*?(\d+).*/, '$1') + '</strong>'
+          }
+        }
+        wio_applyStats(stats);
+        storage.fa_wio_stats = JSON.stringify(stats);
+        storage.fa_wio_stats_exp = +new Date
+      })
+    }
+  }
+};
+
+function wio_applyStats(stats) {
+  var topics = document.getElementById('wio_total_topics'),
+    age = document.getElementById('wio_board_age');
+  if (topics) {
+    topics.firstChild.innerHTML = stats.total_topics
+  }
+  if (age) {
+    age.firstChild.innerHTML = stats.board_age
+  }
+}
+
+/*
+function wio_getNewAvatar() {
+  var newMem = document.getElementById('wio_newest_user'),
+    storage = window.localStorage,
+    id;
+  if (newMem) {
+    id = newMem.getElementsByTagName('A')[0].href.replace(/.*?\/u(\d+).*//*, '$1');
+    if (storage && storage['fa_wio_newava' + id] && storage['fa_wio_newava' + id + '_exp'] > +new Date - 1 * 60 * 60 * 1000) {
+      document.getElementById('wio_new_avatar').firstChild.src = storage['fa_wio_newava' + id]
+    } else {
+      $.get('/ajax/index.php?f=m&user_id=' + id, function(d) {
+        var avatar = $('.tooltip-content > img', d)[0];
+        if (avatar) {
+          document.getElementById('wio_new_avatar').firstChild.src = avatar.src;
+          if (storage) {
+            storage['fa_wio_newava' + id] = avatar.src;
+            storage['fa_wio_newava' + id + '_exp'] = +new Date
+          }
+        }
+      })
+    }
+  }
+};
+*/
+  
+/* 02 - Chatbox AutoLogin */
+$(window).load(function() {
+  var chatbox_script = function() {
+    setTimeout(function(){ $('#chatbox_option_co:visible').click() }, 1000);
+  };
+  var s=document.createElement('script');s.text="("+chatbox_script.toString()+")();";$('object[data^="/chatbox/index.forum"],iframe[src^="/chatbox/index.forum"]').each(function(){try{$(this.contentDocument||this.contentWindow.document).find("#chatbox").closest("html").find("head").first().each(function(){this.appendChild(s.cloneNode(true))})}catch(a){}})
+});
+
+/* 03 - Group Members Preview */
+$(function() {
+  var max_users = 10, // max number of users
+      // language data
+      lang = {
+        view_group : 'View the full group',
+        loading : 'Loading...',
+        view_err : 'There are no members of this group.'
+      },
+      links = $('a[href^="/g"]').filter(function() {
+        if (/\/g\d+-/.test(this.href)) {
+          return this;
+        }
+      }),
+      groupsinfo = {};
+  links.tooltipster && links.not('.tooltipstered').tooltipster({
+    animation : 'fade',
+    interactive : true,
+    contentAsHTML : true,
+    minWidth : 300,
+    maxWidth : 300,
+    delay : 500,
+    arrowColor : "#EEE",
+    autoClose : true,
+    content : lang.loading,
+    functionBefore : function(origin, continueTooltip) {
+      continueTooltip();
+      var groupURL = $(this).attr('href'),
+          groupId = groupURL.replace(/.*?\/g(\d+).*/, '$1'),
+          groupName = $(this).text(),
+          color = origin[0].style.backgroundColor ? origin[0].style.backgroundColor : origin[0].style.color;
+      if (origin.data('ajax') !== 'cached') {
+        if (groupsinfo[groupId] != undefined) {
+          origin.tooltipster('content', groupsinfo[groupId]).data('ajax', 'cached');
+        } else {
+          $.get(groupURL, function(d) {
+            var user = $('form[action="' + groupURL + '"] a[href^="/u"]', d),
+                i = 0,
+                li,
+                container = $('<div>'+
+                  '<div class="fa_group_preview">'+
+                    '<h2 class="fa_group_name" style="color: ' + color + ';">' + groupName + '</h2>'+
+                      '<p class="fa_group_desc">' + $('form[action^="/g"]', d).find('dl:eq(1) dd, tr:eq(2) td.row2 .gen').text() + '</p>'+
+                    '<ul class="fa_group_list"></ul>'+
+                    '<div class="fa_group_button">'+
+                      '<a href="' + groupURL + '" class="button1">' + lang.view_group + '</a>'+
+                    '</div>'+
+                  '</div>'+
+                '</div>');
+            for (; i < max_users; i++) {
+              if ( i == 0 /* && !/g4-/.test(groupURL) */) { i++; } else { max_users = 10; }
+              if (user[i]) {
+                  li = document.createElement('LI');
+                  li.appendChild(user[i]);
+                  $('ul', container).append(li);
+              }
+            }
+
+            if (!$('li', container).length) {
+              $('ul', container).after('<div style="text-align: center;">' + lang.view_err + '</div>');
+            }
+            groupsinfo[groupId] = container.html();
+            origin.tooltipster('content', groupsinfo[groupId]).data('ajax', 'cached');
+          });
+        }
+      }
+    }
+  });
+  $('head').append(
+    '<style type="text/css">'+
+      '.tooltipster-content { background: #131313; border: 1px solid; }'+
+      '.fa_group_preview { font-size:12px; text-align: center; }'+
+      '.fa_group_preview a { text-decoration:none; }'+
+      'h2.fa_group_name { font-size:22px; font-weight: bold; }'+
+      'p.fa_group_desc, h2.fa_group_name { margin: 0.66em 0; }'+
+      'p.fa_group_desc { font-size: 0.95em; }'+
+      'ul.fa_group_list { margin: 0 25px; padding: 0; color: gray; }'+
+      '.fa_group_button { margin-top: 10px; text-align: center; font-size: 0.8em; }'+
+      '.fa_group_button a { border: 1px solid; padding: 3px 5px !important; color: black !important; }'+
+      '.fa_group_button a:hover { border: 1px solid #666; }'+
+      '.fa_group_button a:focus, .fa_group_button a:active { color: #AAA !important; }'+
+    '</style>'
+  );
+});
+
+/* 04 - Linklist Preview */
+
+$(function() {
+  'Linklist Tooltips 2016';
+  'Developed by Ace 1';
+  'All rights reserved';
+
+  var max = {
+      posters: 20, // max amount of posters
+      posts: 10 // max number of posts
+    },
+
+    // language data  
+    lang = {
+      view_list: 'View posts information',
+      view_posterslist : 'View top posters information',
+
+      last_posts: { desc: 'All posts since last visit:' },
+      your_posts: { desc: 'Your recent posts:' },
+      unanswered_posts: { desc: 'Posts you have not replied to:' },
+      today_topics: { desc: 'Top topics for today:' },
+
+      today_posters: { desc: 'Top posting users for today:' },
+      overall_posters: { desc: 'Top posting users since forum creation:' },
+
+      loading: 'Loading...',
+      view_err: 'The posts data could not be retrieved.'
+    },
+
+    desc = function(id) {
+      switch (id) {
+        case 'newposts':
+          id = lang.last_posts;
+          break;
+        case 'egosearch':
+          id = lang.your_posts;
+          break;
+        case 'unanswered':
+          id = lang.unanswered_posts;
+          break;
+        case 'activetopics':
+          id = lang.today_topics;
+          break;
+        case 'today_posters':
+          id = lang.today_posters;
+          break;
+        case 'overall_posters':
+          id = lang.overall_posters;
+          break;
+      }
+
+      return id.desc;
+    },
+
+    links = $('ul[class="linklist"] li a').filter(function() {
+      return this.href && !/\/\?/.test(this.href)
+    }),
+
+    postinginfo = {};
+
+  links.tooltipster && links.not('.tooltipstered').tooltipster({
+    animation: 'fade',
+    interactive: true,
+    contentAsHTML: true,
+    minWidth: 400,
+    maxWidth: 400,
+    delay: 500,
+    theme: 'tooltipster-default',
+    arrowColor: "#EEE",
+    autoClose: true,
+    content: lang.loading,
+    functionBefore: function(origin, continueTooltip) {
+      continueTooltip();
+
+      var postsURL = $(this).attr('href'),
+        postListId = postsURL.replace(/.*?\/(memberlist\?mode|search\?search_id)=(.*)/, '$2'),
+        postListType = $(this).text();
+
+      if (origin.data('ajax') !== 'cached') {
+        if (postinginfo[postListId] != undefined) {
+          origin.tooltipster('content', postinginfo[postListId]).data('ajax', 'cached');
+        } else {
+          $.get(postsURL, function(d) {
+            var i = 0,
+              li,
+              container = $('<div>' +
+                '<div class="fa_posts_preview">' +
+                  '<h2 class="fa_posts_title">' + postListType + '</h2>' +
+                  '<p class="fa_posts_desc">' + desc(postListId) + '</p>' +
+                  '<div class="fa_posts_lists">' +
+                    '<ol class="fa_bottom_ten_list" start="' + Math.ceil(max.posters / 2 + 1) + '"></ol>' +
+                    '<ol class="fa_top_ten_list"></ol>' +
+                    '<div class="fa_view_list_button">' +
+                      '<a href="' + postsURL + '" class="button1">' + lang['view_' + (/_posters/.test(postsURL) ? 'posters' : '') + 'list'] + '</a>' +
+                    '</div>'+
+                  '</div>' +
+                '</div>' +
+              '</div>');
+
+            if (/_posters/.test(postsURL)) {
+              var user_box = $('td.avatar-mini', d),
+                user = user_box.find('a'),
+                post_count = user_box.next().next().next().next(),
+                amount = user_box.length;
+
+              for (; i < max.posters; i++) {
+                if (user[i] && post_count[i]) {
+                  post_count.contents().wrap('<span />');
+                  user.find('img').remove();
+                  li = document.createElement('LI');
+                  li.innerHTML = user[i].outerHTML + ' - ' + post_count[i].textContent;
+
+                  $('.fa_' + (i < (max.posters / 2) ? 'top' : 'bottom') + '_ten_list', container).append(li);
+
+                  if ( amount <= 10 ) {
+                    $('.fa_top_ten_list', container).css({'text-align':'center', 'list-style-postition':'inside'});
+                    $('.fa_top_ten_list > li', container).css('list-style-type', 'none');
+                  }
+
+                }
+                
+                $('li strong', container).each(function() {
+                        var h = this.innerHTML;
+                        if (h.length > 23) {
+                                this.innerHTML = this.innerHTML.substr(0, 20);
+                                this.innerHTML += '...';
+                    }
+                });
+              }
+
+            } else {
+              var topic = $('dd.dterm', d),
+                title = topic.find('.topictitle'),
+                latest_post = topic.siblings('.lastpost').find('a[href^="/t"]'),
+                path = topic.find('.span-tab > a:last-child');
+              
+              for (; i < max.posts; i++) {
+                if (title[i] && path[i]) {
+                  title[i].removeAttribute('class');
+                  title[i].href = latest_post[i].href;
+                  path[i].style.float = 'right';
+                  li = document.createElement('LI');
+                  li.innerHTML = title[i].outerHTML + path[i].outerHTML;
+                  
+                  $('.fa_top_ten_list', container).append(li);
+                }
+              }
+
+              var listItem = $('.fa_top_ten_list li', container),
+                  link, link2,
+                  text, text2,
+                  max_length = 50,
+                  x;
+
+              listItem.each(function() {
+                  link = $(this).children('a').first();
+                  text = link.text().trim();
+                
+                  link2 = $(this).children('a').last();
+                  text2 = link2.text().trim();
+                
+                  x = 0;
+                
+                  while (text.length + text2.length >= max_length) {
+                    text = text.substring(0, text.length - (x + 3));
+                    text += '...';
+                    x++;
+                  }
+                
+                  link.text(text);
+              });
+
+            }
+
+
+            if (!$('li', container).length) $('.fa_top_ten_list', container).after('<div>' + lang.view_err + '</div>');
+            
+            postinginfo[postListId] = container.html();
+            origin.tooltipster('content', postinginfo[postListId]).data('ajax', 'cached');
+
+          });
+        }
+      }
+    }
+  });
+
+  
+  $('head').append(
+    '<style type="text/css">' +
+      '.fa_posts_preview { font-size:12px; margin-bottom:5px; }' +
+      '.fa_posts_preview a { text-decoration:none; }' +
+      'h2.fa_posts_title { font-size:20px; text-align:center; }' +
+      'p.fa_posts_desc, h2.fa_posts_title { margin:10px 0 10px 0; }' +
+      '.fa_posts_lists > * { margin:0 25px; padding:0; }' +
+      '.fa_posts_lists > ol.fa_bottom_ten_list { float:right; }' +
+      '.fa_posts_lists ol span { color: #666; }' +
+      '.fa_view_list_button { margin-top:10px; text-align:center; font-size:0.9em; }' +
+      '.fa_view_list_button a { border: 1px solid; padding: 3px 5px !important; color: black !important; }' +
+      '.fa_view_list_button a:hover { border: 1px solid #666; }' +
+      '.fa_view_list_button a:focus, .fa_view_list_button a:active { color: #AAA !important; }' +
+    '</style>'
+  );
+});
+
+/* 05 - Sublevel Topics */
+window.fa_sub_topics = {
+  forums: {
+    // f3-applications
+    f3: {
+      t2204: 'Application Template',
+      t2206: 'Minimum Requirements',
+      t2207: 'Rules/Tips'
+    },
+    
+    // f5-resignations
+    f5: {
+      t13: 'Resignation Form Template'
+    },
+    
+    // f7-denial-of-service-list
+    f7: {
+      t10: 'DSL Template'
+    },
+
+    // f8-membership confirmations
+    f8: {
+      t1768: 'Membership Confirmation Template'
+    },
+    
+    // f13-members
+    f13: {
+      // Pending. . .
+      // f28: 'Introductions',
+      t1434: 'New Username',
+      t1745: 'Color Change',
+      t2230: 'Traumatize Quiz'
+    },
+    
+    // f29-court
+    f29: {
+      t1440: 'Appeal Template',
+      t1442: 'Court Rules',
+      t2283: 'Rights of Court Members'
+    },
+    
+    // f30-official-testers-recruitment
+    f30: {
+      t1720: 'Testers Recruitment Template',
+      t1685: 'How to become a tester?'
+    },
+    
+    // f35-music-section
+    f35: {
+      t2033: 'Rules of the Music Section'
+    }
+  },
+
+  init: function() {
+    var i, j;
+
+    for (i in fa_sub_topics.forums) {
+      var container = $('a[href^="/' + i + '-"].forumtitle').closest('div'),
+        content, link;
+
+      for (j in fa_sub_topics.forums[i]) {
+        link = '/' + j + '-' + fa_sub_topics.forums[i][j].toLowerCase().replace(/\W/g, '-');
+        content = '<strong class="sub-level"><a href="' + link + '" class="sub-topic">' + fa_sub_topics.forums[i][j] + '</a></strong>';
+        container.append(content);
+      }
+
+      // container.find('.sub-level').first().before('Important Topics: ');
+
+      container.find('strong:not([class])').remove();
+    }
+    
+    // fa_sub_topics.check_locked();
+
+    if (!$('#sub-level-styles')[0]) $('head').append('<style type="text/css" id="sub-level-styles">.sub-level{display:inline-block;font-size:0.9em;margin:3px 5px 0;margin-left:0}.sub-level:before{font-family:FontAwesome;margin-right:5px;content:"\\f08e"}.sub-level:first-of-type{margin-left:5px}</style>');
+    /*
+  },
+
+  check_locked: function() {
+    if (!localStorage) return;
+    var cacheTime = 3, // time in days
+        sub_topics = localStorage['sub-topics'] ? JSON.parse(localStorage['sub-topics']) : {},
+        id, locked,
+        i;
+    
+    if (!localStorage['sub-topics'] || localStorage['sub-topics-exp'] < new Date().getTime() - cacheTime * 24 * 60 * 60 * 1000) {
+      $('.sub-topic').each(function() {
+        id = this.href.replace(/.*\/(t\d+)-.*//*, '$1');
+
+        $.ajax({
+          url: this.href,
+          type: 'get',
+          async: false,
+          success: function(d) {
+            locked = $('img[src$="i_reply_locked.png"].i_reply', d).length ? true : false;
+            sub_topics[id] = locked ? 'locked' : 'unlocked';
+          }
+        });
+        
+        localStorage['sub-topics'] = JSON.stringify(sub_topics);
+        localStorage['sub-topics-exp'] = new Date().getTime();
+      });
+    }
+    
+    for (i in sub_topics) $('a[href*="/' + i + '-"].sub-topic').parent().addClass(sub_topics[i] == 'locked' ? 'locked' : 'unlocked');
+    */
+  }
+};
+
+$(function() {
+  _userdata.session_logged_in && !isMobile && fa_sub_topics.init();
+});
+
+/* 06 - Forum Actions Tooltipsters */
+$(function() {
+  // Forum Actions shit
+  var forum_actions = '' +
+    '<div class="forum-actions-container">' +
+      '<div class="forum-actions-title">Forum Actions</div>' +
+      '<a href="/?mark=forums" class="forum-action">Mark all forums read</a>' +
+      '<a href="/?mode=delete_cookies" class="forum-action">Delete forum cookies</a>' +
+    '</div>',
+
+    action_link = $('#forum_actions div.h3 > a');
+
+  action_link.tooltipster && action_link.tooltipster({
+    interactive: true,
+    contentAsHTML: true,
+    delay: 500,
+    content: forum_actions
+  });
+
+  if (!$('#forum-actions-style')[0]) $('head').append('<style type="text/css" id="forum-actions-style">.forum-actions-container{font-size:12px;margin:5px}.forum-actions-container>.forum-actions-title{text-align:center;font-size:1.4em;margin-bottom:10px}.forum-actions-container>a{display:block;margin:5px 0}</style');
+
+  var most_tagged = $('#left .module table[summary="The most tagged members"]'),
+      tagged_container = $('<div>' +
+                    '<div class="most-tagged">' +
+                      '<h2 class="most-tagged-title">Most tagged members</h2>' +
+                  	  '<p class="most-tagged-desc">Members tagged in the most messages since forum creation:</p>' +
+                      '<ol class="bottom-five-tagged" start="6"></ol>' +
+                      '<ol class="top-five-tagged"></ol>' +
+                    '</div>' +
+                  '</div>'),
+      monthly_posters = $('#left .module table[summary="Top posting users this month"]'),
+      posters_container = $('<div>' +
+                    '<div class="top-posters">' +
+                      '<h2 class="top-posters-title">This month\'s top posters</h2>' +
+                  	  '<p class="top-posters-desc">Top posting users this month:</p>' +
+                      '<ol class="bottom-five-posters" start="6"></ol>' +
+                      '<ol class="top-five-posters"></ol>' +
+                    '</div>' +
+                  '</div>'),
+      li, user, value,
+      index = 0;
+  
+  most_tagged.find('tr > td[nowrap]:last-child').each(function() {
+    index++;
+    value = !this.title ? $(this).tooltipster('content') : this.title;
+    user = this.previousSibling.innerHTML;
+    value = '<b>' + value.replace(/.*\s(\d+)\s.*/, '$1') + '</b> tags';
+    li = '<li>' + user + ' - ' + value + '</li>';
+    $('.' + (index < 6 ? 'top' : 'bottom') + '-five-tagged', tagged_container).append(li);
+  });
+  
+  index = 0;
+
+  monthly_posters.find('tr > td[nowrap]:last-child').each(function() {
+    index++;
+    value = !this.title ? $(this).tooltipster('content') : this.title;
+    user = this.previousSibling.innerHTML;
+    value = '<b>' + value.replace(/(\d+)\sPosts?.*/, '$1') + '</b> ' + value.replace(/\d+\s(posts?).*/i, '$1').toLowerCase();
+    li = '<li>' + user + ' - ' + value + '</li>';
+    $('.' + (index < 6 ? 'top' : 'bottom') + '-five-posters', posters_container).append(li);
+  });
+  
+  $('a', tagged_container).attr('data-id', function() {
+    var id = this.href.replace(/.*u(\d+)/, '$1');
+    return id;
+  }).addClass('mentiontag');
+  $('a', posters_container).removeAttr('class');
+  
+  
+  $('#most-tagged').tooltipster && $('#most-tagged').tooltipster({
+    interactive: true,
+    contentAsHTML: true,
+    delay: 500,
+    minWidth: 400,
+    maxWidth: 400,
+    multiple: true,
+    content: tagged_container.html(),
+    functionBefore: function(origin, continueTooltip) {
+      continueTooltip();
+      $('.most-tagged .mentiontag').tooltipster();
+    }
+  });
+  
+  $('#monthly-posters').tooltipster && $('#monthly-posters').tooltipster({
+    interactive: true,
+    contentAsHTML: true,
+    delay: 500,
+    minWidth: 400,
+    maxWidth: 400,
+    content: posters_container.html()
+  });
+
+  if (!$('#posters-tagged-styles')[0]) $('head').append('<style type="text/css" id="posters-tagged-styles">.most-tagged,.top-posters{font-size:12px;margin-bottom:10px}.most-tagged h2,.top-posters h2{font-size:20px;text-align:center}.most-tagged>:not(ol),.top-posters>:not(ol){margin:10px 0}.top-posters>ol, .most-tagged>ol{margin:0 30px}.most-tagged>.bottom-five-tagged,.top-posters>.bottom-five-posters{float:right}</style>');
+});
+
+/* 07 - Quick Create New Topic */
+$(function() {
+  if (!_userdata.session_logged_in) return;
+  var lang = {
+    title: 'Create a New Topic'
+  };
+  
+  $('a[href^="/f"]').each(function() {
+    var forum_id = this.href.replace(/.*\/f(\d+)-.*/, '$1'),
+        new_topic_url = '/post?f=' + forum_id + '&mode=newtopic',
+        new_topic_html = '<a href="' + new_topic_url + '" title="' + lang.title + '" class="new-topic"></a>';
+  
+    $(this).after(new_topic_html);
+  });
+  
+  $('li.row').addClass(function() {
+    var i = $(this).find('dl.icon').css('background').indexOf('lock') > -1;
+    
+    return i ? 'locked' : '';
+  });
+  
+  $('head').append('<style type="text/css">a.forumtitle,a.new-topic{vertical-align:middle}a.new-topic{display:inline-block;margin-left:5px;color:#5F5;opacity:0}.forabg:hover a.new-topic{opacity:1}a.new-topic:after{font-family:FontAwesome;content:"\\f067"}a.new-topic:hover{color:#5F5!important;text-shadow:0 0 0.1em,0 0 0.1em,0 0 0.1em}li.row.locked a.new-topic{color:rgba(255,85,85,0.3)!important;text-shadow:0 0 1em #000,0 0 1em #000,0 0 1em #000;cursor:not-allowed;pointer-events:none}li.row.locked a.new-topic:after{content:"\\f00d"}</style>');
+});
