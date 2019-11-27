@@ -1,0 +1,638 @@
+// Table of Contents
+
+/*
+ * 01 - Group Classes in Posts
+ * 02 - Edited Posts
+ * 03 - Asynchronous Quotes
+ * 04 - MentionTag Colors
+ * 05 - Applications Results
+ * 06 - Application Topic Starter/Edit First Post
+ * 07 - Traumatize Verified
+ * 08 - Mentiontag tooltipster fix
+ * 09 - User Post Content Class
+ * 10 - Vote Bar
+ * 11 - Challonge Topics
+ * 12 - Profile Fields
+ * 13 - Start Phases
+ * 14 - Genosis Application Process Sticky Topic
+*/
+
+/* 01 - Group Classes in Posts -  */
+$(function() {
+  // Edit the values below whenever a rank/group is added
+  var s = document.createElement('style');
+  s.name = 'usergroup-post-borders';
+  s.type = 'text/css';
+  s.textContent = '';
+
+  for (var u in user_groups) {
+    groupColor(user_groups[u].class, user_groups[u].hex_color);
+    s.textContent += '.post.' + user_groups[u].class + ':hover{border-color:' + user_groups[u].hex_color + '}';    
+  }
+  
+  $('head').append(s);
+
+  function groupColor(classname, color) {
+    $('.post:has(a[href*="/u"] span[style="color:' + color + '"] strong)').addClass(classname)
+  }
+});
+
+/* 02 - Edited Posts -  */
+$(function() {
+  $(".postbody").filter(function() {
+    return -1 != $(this).html().indexOf("[diablos]") && $(this).html($(this).html().replace(/\[diablos\]/g, ""))
+  }).parent().find(".fa_edited_post").remove();
+  
+  $(".fa_edited_post").css("display", "");
+});
+
+/* 03 - Asynchronous Quotes -  */
+$(function() {
+  $(".i_icon_quote").parent().click(function(e) {
+    $.get(this.href, function(data) {
+      var quote_text_info = $('#text_editor_textarea', data).val(),
+        instance = $("#text_editor_textarea").sceditor("instance");
+      instance.insert(quote_text_info + "\n");
+      $("html, body").animate({
+        scrollTop: $(document.anchors.quickreply).offset().top
+      }, 1000, function() {
+        instance.focus()
+      })
+    });
+    e.preventDefault()
+  })
+});
+
+/* 04 - MentionTag Colors -  */
+$(function() {
+  var bold = false,
+      storage = window.localStorage,
+      cacheTime = 30,
+      dataId, c;
+  $('meta[name="title"]').after('<style type="text/css" id="mentions"/>');
+  $('.mentiontag, blockquote a[href^="/u"][rel]').each(function() {
+    dataId = this.href.replace(/.*\/u(\d+)/, '$1');
+    if (storage) {
+      var o = storage.mentionColors ? JSON.parse(storage.mentionColors) : {};
+      if (o[dataId] && o[dataId].exp > new Date().getTime() - 60 * 1000 * cacheTime) {
+        c = o[dataId].color
+      } else {
+        $.ajax({
+          url: this.href,
+          type: 'get',
+          async: false,
+          success: function(data) {
+            c = $('.page-title span', data).css('color');
+
+            o[dataId] = {
+              color: c,
+              exp: new Date().getTime()
+            };
+          }
+        });
+      }
+      storage.mentionColors = JSON.stringify(o);
+      if ($('#mentions').text().indexOf('.mentiontag[data-id="' + dataId + '"]') == -1) {
+        $('#mentions').append('.mentiontag[data-id="' + dataId + '"], a[href="/u' + dataId + '"][rel] { color: ' + c + '; ' + (bold ? 'font-weight: bold; ' : '') + '}')
+      }
+    } else {
+      console.log('localStorage is not supported.')
+    }
+  })
+});
+
+/* 05 - Applications Results -  */
+/\/t\d+/.test(window.location.href) && $(function() {
+  var applications = 3,
+      max_topics = 5;
+  if (!url_egosearch || url_egosearch.split('where=').pop() != 'f' + applications) return;
+  if (/template|testers|requirements|rules-tips/.test(location.href)) return;
+  window.fa_application_results = {
+    results: {
+      accepted: {
+        icon_id: 1,
+        mark: '<i class="fa"></i> Accept',
+        mark_title_mod: 'Accept this Application',
+        marking: '<i class="fa fa-spin"></i> Accepting Application...',
+        marked: '<i class="fa"></i> Accepted !',
+        forum: 23,
+        amount: 0
+      },
+      denied: {
+        icon_id: 2,
+        mark: '<i class="fa"></i> Deny',
+        mark_title_mod: 'Deny this Application',
+        marking: '<i class="fa fa-spin"></i> Denying Application...',
+        marked: '<i class="fa"></i> Denied !',
+        forum: 24,
+        amount: 0
+      },
+      frozen: {
+        icon_id: 3,
+        mark: '<i class="fa"></i> Freeze',
+        mark_title_mod: 'Freeze this Application',
+        marking: '<i class="fa fa-spin"></i> Freezing Application...',
+        marked: '<i class="fa"></i> Frozen !',
+        forum: null,
+        amount: null
+      },
+      voided: {
+        icon_id: 4,
+        mark: '<i class="fa"></i> Void',
+        mark_title: 'Voiding your own application will disallow you from re-applying for 10 days.',
+        mark_title_mod: 'Void this Application',
+        marking: '<i class="fa fa-spin"></i> Voiding Application...',
+        marked: '<i class="fa"></i> Voided !',
+        forum: 25,
+        amount: 0
+      },
+      plagiarized: {
+        icon_id: 5,
+        mark: '<i class="fa"></i> Plagiarized',
+        mark_title_mod: 'Mark this Application as Plagiarized',
+        marking: '<i class="fa fa-spin"></i> Makring Application as Plagiarized...',
+        marked: '<i class="fa"></i> Plagiarized !',
+        forum: 26,
+        amount: 0
+      },
+      reopen: {
+        icon_id: 0,
+        mark: '<i class="fa"></i> Reopen',
+        mark_title_mod: 'Reopen this Application',
+        marking: '<i class="fa fa-spin"></i> Unlocking Application...',
+        marked: '<i class="fa"></i> Unlocked !',
+        forum: null,
+        amount: null
+      }
+    },
+    post_id: $('div.post')[0].id.slice(1),
+    topic_id: window.location.pathname.replace(/\/t(\d+).*/, '$1'),
+    encode: function(string) {
+      return encodeURIComponent(escape(string).replace(/%u[A-F0-9]{4}/g, function(match) {
+        return '&#' + parseInt(match.substr(2), 16) + ';'
+      })).replace(/%25/g, '%')
+    }
+  };
+  var title = $('.page-title > a').first(),
+      resultImg = $('.topic-title > img').first(),
+      topic_starter;
+  
+  if (resultImg[0]) {
+    var main = document.getElementById('main-content'),
+        post = $('div.post', main)[0],
+        author = $('.postprofile a[href^="/u"]', post).text(),
+        mod = $('.i_icon_ip', post)[0],
+        lock = $('a[href*="/modcp?mode=lock"]')[0],
+        unlock = $('a[href*="/modcp?mode=unlock"]')[0],
+        move = $('a[href*="/modcp?mode=move"]')[0],
+        container = document.createElement('div'),
+        button, re, i;
+    
+    container.className = 'fa_application_results';
+    topic_starter = (author == _userdata.username);
+    
+    for (i in fa_application_results.results) {
+      if (!mod) break;
+        
+      re = new RegExp(i, 'i');
+      
+      for (j in fa_application_results.results[i]) {
+        if (!/frozen/i.test(resultImg[0].alt) || fa_application_results.results[i][j] == null) continue;
+        fa_application_results.results[i][j] = fa_application_results.results[i][j].toString().replace(/(freez|froze)/ig, function(_, r) {
+          return 'Un' + r.toLowerCase()
+        }).replace('', '');
+        console.log(j);
+        if (j == 'icon_id') fa_application_results.results[i][j] = 0
+      };
+      
+      button = document.createElement('a');
+      button.className = i;
+      button.innerHTML = fa_application_results.results[i].mark || '<span>' + i.substr(0, 1).toUpperCase() + i.substr(1, i.length) + '</span>';
+      button.title = mod ? fa_application_results.results[i].mark_title_mod : fa_application_results.results[i].mark_title;
+      button.href = '#' + i;
+      button.onclick = (function(i) {
+        return function() {
+          var t = this,
+            true_void, reason, j, m = move.href;
+          
+          if (!mod && i == 'voided') {
+            true_void = confirm('Are you sure you want to void your application?\n\nYou won\'t be able to apply again for 10 days.');
+            if (true_void) {
+              reason = prompt('Brief reason for voiding your application');
+              if (!reason && reason == '') {
+                reason = 'None.'
+              } else return false
+            } else return false
+          }
+          t.innerHTML = fa_application_results.results[i].marking;
+          t.removeAttribute('title');
+          t.onclick = function() {
+            return false
+          };
+          
+          $(t).siblings().fadeOut();
+          
+          $.get('/post?p=' + fa_application_results.post_id + '&mode=editpost', function(d) {
+            var auth = $('input[name="auth[]"]', d),
+                s = /unfr|reopen/i.test(fa_application_results.results[i].mark) ? $('input[name="subject"]', d)[0].value : $('input[name="subject"]', d)[0].value.replace(/(.*(?:\#|\*)\d+)\s\[(?:Questioning|Voting|Testing).*/, '$1');
+            
+            $.ajax({
+              url: '/f3-',
+              type: 'get',
+              async: false,
+              success: function(d2) {
+                var a, d, v, p;
+                a = d = v = p = 0;
+                
+                $('dd.dterm', d2).each(function() {
+                  var bi = this.style.backgroundImage,
+                    r = bi.replace(/.*result=(.*)"\)/, '$1');
+                  if (!bi) return true;
+                  
+                  /acce/i.test(r) ? a++ : /deni/i.test(r) ? d++ : /void/i.test(r) ? v++ : /plag/i.test(r) ? p++ : ''
+                });
+                fa_application_results.results[i].amount = /acce/i.test(i) ? a : /deni/i.test(i) ? d : /void/i.test(i) ? v : /plag/i.test(i) ? p : '';
+                
+                if (fa_application_results.results[i].amount >= max_topics) {
+                  var re = new RegExp(i, 'i'),
+                      apps = $('dd.dterm', d2).filter(function() {
+                        return re.test(this.style.backgroundImage)
+                      }),
+                      lastApp = apps.last().find('.topictitle')[0].href.replace(/.*\/t(\d+)-.*/, '$1'),
+                      moveURL = m.replace(/&t=\d+/, '&t=' + lastApp);
+                  $.ajax({
+                    url: moveURL,
+                    type: 'get',
+                    async: false,
+                    beforeSend: function(xhr) {
+                      if (fa_application_results.results[i].forum == null) xhr.abort()
+                    },
+                    success: function() {
+                      $.ajax({
+                        url: moveURL,
+                        type: 'post',
+                        async: false,
+                        data: {
+                          new_forum: 'f' + fa_application_results.results[i].forum,
+                          confirm: 1
+                        },
+                        success: function() {
+                          console.info('Successfully moved topic ' + lastApp)
+                        }
+                      })
+                    }
+                  })
+                }
+              }
+            });
+            
+            $.post('/post?p=' + fa_application_results.post_id + '&mode=editpost', {
+              subject: s,
+              message: $('#text_editor_textarea', d)[0].value,
+              post_icon: fa_application_results.results[i].icon_id,
+              edit_reason: '',
+              notify: '0',
+              post: 1
+            }).done(function() {
+              t.innerHTML = fa_application_results.results[i].marked;
+              t.className += ' validated';
+              var src = $('.topic-title > img').attr('src');
+              var removeable = (/unfr|reopen/i.test(fa_application_results.results[i].mark)) ? true : false;
+              $('.topic-title > img').attr('src', removeable ? src.replace(/\?result=.*/, '') : src + '?result=' + i);
+            })
+          });
+          $('.validated').tooltipster('destroy').removeAttr('title');
+          if (mod) $.get((/fr|reop/i.test(i) ? unlock : lock).href);
+          setTimeout(function() {}, 3000);
+          return false
+        }
+      })(i);
+      container.appendChild(button);
+    }
+    switch (true) {
+      case /(accepted|denied|voided|plagiarized)/i.test(resultImg[0].alt):
+        $('a:not(.reopen)', container).remove();
+        break;
+      default:
+        $('a.reopen', container).remove();
+        break
+    }
+    if (mod && (!title[0].nextSibling || title[0].nextSibling.className != 'fa_application_results')) title.after(container);
+    if (!$('#topicStyles')[0]) $('head').append('<style type="text/css" id="topicStyles">.fa_application_results{display:inline-block;margin-left:1em}.fa_application_results>a{display:inline-block;border:1px solid;font-size:.5em;text-transform:uppercase;transition:all .25s ease;-ms-transition:all .5s ease;cursor:pointer;color:#666;background-color:#131313;text-align:center;margin:.1em .5em;padding:5px}.fa_application_results>a>i{color:inherit!important;transition:0s;font-family:FontAwesome!important}.fa_application_results>.accepted:hover{color:#0F0!important;text-shadow:0 0 .1em #0F0,0 0 .1em #0F0,0 0 .1em #0F0;background-color:#030!important}.fa_application_results>.denied:hover{color:red!important;text-shadow:0 0 .1em red,0 0 .1em red,0 0 .1em red;background-color:#300!important}.fa_application_results>.frozen:hover{color:#0FF!important;text-shadow:0 0 .1em #0FF,0 0 .1em #0FF,0 0 .1em #0FF;background-color:#033!important}.fa_application_results>.voided:hover{color:#639!important;text-shadow:0 0 .1em #639,0 0 .1em #639,0 0 .1em #639;background-color:#102!important}.fa_application_results>.plagiarized:hover{color:#F70!important;text-shadow:0 0 .1em #F70,0 0 .1em #F70,0 0 .1em #F70;background-color:#320!important;}.fa_application_results>.reopen:hover{color:#FFF!important;text-shadow:0 0 .1em #FFF,0 0 .1em #FFF,0 0 .1em #FFF;background-color:#AAA!important}.fa_application_results i:before{font-size:14px;font-family:FontAwesome}.page-title{margin:10px 0}.page-title>a{vertical-align:top}.fa_application_results .validated{opacity:.5;cursor:not-allowed}.fa_application_results .validated:hover{color:#999;background-color:#131313!important}</style>');
+    if (!$('link[href$="font-awesome.min.css"]')[0]) $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">')
+  }
+});
+
+/* 06 - Application Topic Starter/edit First Post -  */
+$(function() {
+  if (!url_egosearch || url_egosearch.split('where=').pop() != 'f3') return;
+  $(function() {
+    var topic_starter = $('.post .author strong')[0].textContent,
+      a, i = 0,
+      f = false,
+      g = _userdata.usergroup,
+      apps = localStorage.applications ? JSON.parse(localStorage.applications) : [];
+    console.warn('You are viewing an application.');
+    if (_userdata && _userdata.usergroup) console.log(g);
+    
+    if (g == -1 || g == 8 || g == 11) {
+      if (_userdata.username != topic_starter) { return; }
+      
+      a = $('.i_icon_edit').first().parents('a').attr('href').replace(/\/post\?p=(\d+)&.*/, '$1');
+      for (; i < apps.length; i++) apps[i] == a ? f = true : '';
+      if (f == false) apps.push(a);
+      localStorage.applications = JSON.stringify(apps);
+      
+      $('.i_icon_edit').slice(1).parents('li').remove()
+    }
+  })
+});
+  
+/* 07 - Traumatize Verified */
+$(function() {
+  var path = url_egosearch ? url_egosearch.split('where=f').pop() : null;
+  // console.log(path);
+      
+  $('span.label').filter(function() { return /trauma/i.test(this.innerHTML) }).each(function() {
+    // wraps with trauma node
+    $(this).next().andSelf().wrapAll('<div class="trauma-label" />');
+  
+    // removes contents
+    $(this).empty();
+  
+    // assigns trauma node to variable
+    var t = $(this).closest('.trauma-label'),
+        verified = /passed/.test(t[0].innerHTML);
+    
+    t.nextUntil('.label', 'br').remove();
+    t.addClass(verified ? 'trauma-ver' : 'trauma-ver failed');
+  });
+  
+  $(function() {
+    if (!/^(?:3|23|24|25|26)$/.test(path) || _userdata.usergroup == 8) {
+      $('.trauma-label').remove();
+    } else {
+      $('head').append('<style type="text/css" name="trauma-css">div.trauma-label.trauma-ver{margin:10px 0 5px}div.trauma-label.trauma-ver span.label{display:inline-block;text-align:center;width:auto;white-space:nowrap;font-size:14px;font-weight:700;color:#6F6!important;text-shadow:none!important}div.trauma-label.trauma-ver.failed span.label{color:#f66!important}div.trauma-label.trauma-ver span.label:before{content:\'Traumatize Verified\'}div.trauma-label.trauma-ver span.label:after{font-family:FontAwesome;content:\'\\f00c\';margin-left:3px;font-size:.9em;font-weight:400}div.trauma-label.trauma-ver.failed span:after{content:\'\\f00d\'}div.trauma-label+br,div.trauma-label+br+br,div.trauma-label>ul,.trauma-label span.value{display:none}</style>');
+    }
+  });
+});
+
+// Members that have passed the trauma quiz topic
+/\/t1238[p]?\d*-/.test(location.href) && $(function() {
+  $('.post')[0].innerHTML = $('.post')[0].innerHTML.replace(/<br>\[(Active|Inactive|Left|Passed|Failed)\]/ig, function(_, a) {
+    return '<br class="' + a.toLowerCase() + '" />';
+  });
+  
+  $('div font[color="#000000"]').each(function() {
+    $(this).contents().filter(function() {
+      return this.nodeType == 3;
+    }).wrap('<span class="test-taker" />');
+  });
+  
+  $(function() {
+    var a = 0;
+    $('.passed + font .active + font > span.test-taker').each(function() {
+      a++;
+    });
+    $('.post')[0].innerHTML = $('.post')[0].innerHTML.replace(/total\sactive:\s-/i, 'Total Active: <strong>' + a + '</strong>');
+    $('head').append('<style type="text/css">span.test-taker:before{content:" - "}.passed+font span.test-taker{color:#6F0}.failed+font span.test-taker{color:red}.active+font span.test-taker:after{content:" [Active]"}.inactive+font span.test-taker{opacity:.25}.inactive+font span.test-taker:after{content:" [Inactive]"}.left+font span.test-taker{opacity:.25;text-decoration:line-through;color:#999}.left+font span.test-taker:after{content:" [Left]"}.passed+font{position:relative}.left+font{position:absolute;top:1.1em;left:400px;white-space:nowrap}</style>');
+  });
+});
+  
+/* 08 - Mentiontag tooltipster fix */
+$(function() {
+  $(function() {
+    $('.mentiontag').each(function() {
+      $(this).tooltipster('destroy');
+      $(this).tooltipster({
+        content: 'Viewing profile: ' + this.textContent.replace(/^@/, '')
+      });
+    });
+  });
+});
+
+/* 09 - User Post Content Class */
+$(function() {
+  $('.post').each(function() {  
+    $(this).find('.content').addClass(function() {
+      var id = $(this).parents('.post').find('.postprofile a[href^="/u"]').attr('href');
+      id = id ? id : '0';
+      
+      return 'user' + id.replace(/.*\/u(\d+)/, '$1')
+    });
+  });
+});
+  
+/* 10 - Vote Bar */
+$(function() {
+  if (url_egosearch && /f(?:3|7|12|19|23|24|25|26|29)$/.test(url_egosearch.split('where=').pop())) {
+    $('.vote').remove();
+    return;
+  } else {
+    $('.vote.gensmall').css('display', 'inline-block');
+  }
+  
+    for (var vote = $('.vote'), i = 0, j = vote.length, bar, total, percent, n_pos, n_neg; i < j; i++) {
+        bar = $('.vote-bar', vote[i])[0];
+        if (bar) {
+            total = +bar.title.replace(/.*?\((\d+).*/, '$1');
+            percent = +bar.title.replace(/.*?(\d+)%.*/, '$1');
+            n_pos = Math.round(total * (percent / 100));
+            n_neg = total - n_pos
+        } else {
+            n_pos = 0;
+            n_neg = 0
+        }
+        vote[i].insertAdjacentHTML('afterbegin', '<span class="vote_num vote_good">' + n_pos + '</span>');
+        vote[i].insertAdjacentHTML('beforeend', '<span class="vote_num vote_bad">' + n_neg + '</span>');
+      
+        if (!$('a', vote[i]).length) $(bar).remove();
+      
+        $('a', vote[i]).click(function() {
+            var that = this,
+                links = $('a', that.parentNode);
+            $.get(that.href, function() {
+                var n = that[/minus/.test(that.className) ? 'nextSibling' : 'previousSibling'];
+                n.innerHTML = ++n.innerHTML;
+                links.fadeOut()
+            });
+            links.attr('href', '#').css({
+                opacity: 0.4,
+                cursor: 'default'
+            });
+            return false
+        })
+    }
+});
+
+/* 11 - Challonge Topics */
+/\/t1791/.test(location.href) && $(function() {
+  var posts = $('.post .postbody'),
+      show_standings = false,
+      h = 750;
+  posts[0].innerHTML = posts[0].innerHTML.replace(/\[challonge\]/g, '<div id="challonge" style="height: ' + h + 'px;"></div>');
+
+  $('#challonge').challonge('spring2017', {subdomain: 'genocideclan', theme: '1', multiplier: '1.0', match_width_multiplier: '1.0', show_final_results: '0', show_standings: show_standings ? '1' : '0' });
+});
+
+(function() {
+  var $,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  $ = jQuery;
+
+  $.fn.challonge = function(tournamentUrl, options) {
+    var Challonge;
+    Challonge = (function() {
+
+      function Challonge($this, tournamentUrl, options) {
+        this._$iframe = __bind(this._$iframe, this);
+        this._sourceWithOptions = __bind(this._sourceWithOptions, this);        this.tournamentUrl = tournamentUrl || '';
+        this.options = $.extend({}, $.fn.challonge.defaults, options || {});
+        this.subdomain = this.options.subdomain;
+        this.height = $this.height();
+        $this.html(this._$iframe);
+      }
+
+      Challonge.prototype._sourceWithOptions = function() {
+        var subdomain;
+        subdomain = this.subdomain ? "" + this.subdomain + "." : '';
+        return "http://" + subdomain + "challonge.com/" + this.tournamentUrl + "/module?" + ($.param(this.options));
+      };
+
+      Challonge.prototype._$iframe = function() {
+        return $("<iframe src='" + (this._sourceWithOptions()) + "' width='100%' height='" + this.height + "' frameborder='0' scrolling='auto' allowtransparency='true' />");
+      };
+
+      return Challonge;
+
+    })();
+    new Challonge($(this), tournamentUrl, options);
+    return this;
+  };
+
+  $.fn.challonge.defaults = {
+    multiplier: 1.0,
+    match_width_multiplier: 1.0,
+    show_final_results: 0,
+    show_standings: 0,
+    theme: 1,
+    subdomain: null
+  };
+
+}).call(this);
+  
+/* 12 - Profile Fields */
+$(function() {
+  $('head').append('<style>.profile-field { display: block !important; } .profile-field.field_nickname, .profile-field.field_gender, .profile-field.field_reputation, .profile-field.field_age { display: none !important; }</style');
+  
+  for (var field = $('.profile-field'), i = 0, j = field.length; i < j; i++) {
+    field[i].className += ' field_' + $('.label', field[i]).text().toLowerCase().replace(/ : |\*/g, '').replace(/[^a-z0-9]/g, function(s) {
+      var c = s.charCodeAt(0);
+      if (c == 32) return '-';
+      return '__' + ('000' + c.toString(16)).slice(-4)
+    });
+  }
+});
+  
+/* 13 - Start Phases */
+$(function() {
+  if (_userdata.user_level == 0) return;
+  $(function() {
+    if (!$.sceditor || !url_egosearch || !/f3$/.test(url_egosearch)) return;
+    
+    var topic_title = $('h1.page-title > a')[0].innerHTML,
+        questioning = /\[questioning\sphase\]/i.test(topic_title),
+        voting = /\[voting\sphase\]/i.test(topic_title),
+        locked_topic = $('a > img[src$="i_reply_locked.png"]')[0],
+        
+        instance = $('#text_editor_textarea').sceditor('instance'),
+        
+        what_phase, v, a, s, f, t, c, h, new_text, bb_text,
+                
+        content = {
+          html: '<div id="phase-change"><label class="questioning"><input type="checkbox" name="questioning-phase" /><span class="start-phase" phase-info="#questioning-phase">Start Questioning Phase</span></label><label class="voting"><input type="checkbox" name="voting-phase" /><span class="start-phase" phase-info="#voting-phase">Start Voting Phase</span></label></div>',
+          css: '<style type="text/css" name="phase-change">#phase-change{margin-top:15px}#phase-change label{display:inline-block;margin:0;width:50%;padding:0 5px}#phase-change label.questioning{text-align:right}#phase-change label.voting{text-align:left}#phase-change label.disabled{pointer-events:none;opacity:.5}#phase-change .start-phase{border:1px solid;padding:5px 10px;text-transform:uppercase;display:inline-block;cursor:pointer;background-color:#111;color:#666}#phase-change .start-phase:before{font-family:FontAwesome;margin-right:5px}.questioning .start-phase:before{content:"\\f128"}.voting .start-phase:before{content:"\\f0e3"}#phase-change .start-phase:hover{color:#FFF}#phase-change:not(.inputs) input{display:none}#phase-change input:checked+.start-phase{color:#0f0;background-color:#010}</style>';
+        };
+    
+    if (locked_topic) return;
+    
+    $('#quick_reply > div:not([id])').append(content.html);
+    $('head').append(content.css);
+    
+    what_phase = questioning ? '.questioning' : voting ? 'label' : '.voting';
+    $('#phase-change ' + what_phase).addClass('disabled');
+    
+    if (voting) return;
+    
+    $('#phase-change .start-phase').click(function() {
+      c = $(this).prev().prop('checked');
+      h = $(this).attr('phase-info').replace('-', ' ').slice(1);
+      new_text = (h.charAt(0).toUpperCase() + h.slice(1)).replace(/(\s.)/, function(_, a) {
+        return a.toUpperCase();
+      });
+      
+      bb_text = '[b]' + new_text +  ' Begins.[/b]';
+      
+      if (c) {
+        instance.val(instance.val().replace(bb_text, ''));
+      } else {
+        if ((instance.val().trim()).length) {
+          instance.val(bb_text + '\n\n' + instance.val());
+        } else {
+          instance.val(bb_text);
+        }
+      }
+    });
+    
+    $('#quick_reply').submit(function(event) {
+      f = this;
+      v = $('#phase-change input:checked');
+      a = $('.edit-button a').first()[0].href;
+      s = $('h2.topic-title a').first().html();
+      
+      s = s.replace(/(.*)\[.*/, '$1');
+            
+      if (!v[0]) return;
+      
+      event.preventDefault();
+    
+      $.get(a, function(d) {
+        t = $('#text_editor_textarea', d)[0].value;
+                
+        $.post(a, {
+          subject: s + ' [' + new_text + ']',
+          message: t,
+          edit_reason: '',
+          notify: '0',
+          post: 1
+        }).done(function() {
+          console.info('Successfully moved Application ' + a.replace(/.*\/post\?p=(\d+)\&.*/, '$1') + ' into the ' + new_text + '.');
+          setTimeout(function() {
+            f.submit();
+          }, 3000);
+        });
+      });
+    });
+  });
+});
+  
+/* 14 - Genosis Application Process Sticky Topic (tburn rox) */
+/\/t2219-/.test(location.href) && $(function() {
+  
+  $.get('/h6-', function(d) {
+    var recruitment_html = $('#recruitment', d).html(),
+        s = document.createElement('style');
+    
+    s.type = 'text/css';
+    s.textContent = $('#main-content style', d).text();
+    
+    $('.post .content.clearfix').first().addClass('r-p').html(s.outerHTML + recruitment_html);
+    
+    $(d).filter('script[name="recruitment-process"]').each(function() {
+      $.globalEval(this.text || this.textContent || this.innerHTML || '');
+    });
+  });
+  
+  
+});
