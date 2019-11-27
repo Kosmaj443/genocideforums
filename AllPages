@@ -1,0 +1,2723 @@
+// Table of Contents
+
+/* 
+ * 01 - Remove Ads
+ * 02 - Rank Titles/Smooth Anchors/CSS Function
+ * 03 - PostCards
+ * 04 - All Tooltipsters
+ * 05 - Navlinks
+ * 06 - 1 Topics to 1 Topic
+ * 07 - UnHover
+ * 08 - Profile Tooltipster Preview
+ * 09 - Path Changer
+
+ * 10 - SyncEditor
+ * 11 - _userdata.usergroup
+ * 12 - Topic Icon Removal (besides applications
+ * 13 - Member Profile Name Colors/Dual Colors
+ * 14 - Personal Titles
+ * 15 - Activity in the user profile
+ * 16 - No gender mod/genocide clan gender
+ * 17 - User Avatar Before Mentions
+ * 18 - Colorize the code tags
+
+ * 19 - Those that edit their application
+ * 20 - Profile Deletion Option Removed
+ * 21 - "Edit this page" feature
+ * 22 - CSS Stylesheet under Administration Panel
+ * 23 - Select code feature
+ * 24 - Chatbox functions
+ * 25 - Fake GeNo List/Application Warning
+ * 26 - Mentiontag Nicknames
+ * 27 - Tab Closal Prevention (while posting)
+
+ * 28 - Mention Suggestion
+ * 29 - Emoticon Search
+ * 30 - Change Points Value via Profile
+ * 31 - Extra Register on Login Page Removal/Login Focus
+ * 32 - "You are logged in as" points value
+ * 33 - Random Styles [not used]
+ * 34 - 
+ * 35 - 
+ * 36 -
+
+ * 37 - 
+*/
+
+(function() {
+  for (var key in localStorage) /_points|mentionAvatar_|userColor_|UserPts/.test(key) ? localStorage.removeItem(key) : '';
+
+  window.isMobile = false; // initiate as false
+  // device detection
+  if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)  || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) isMobile = true;
+  if (isMobile) document.write('<style type="text/css" name="mobile-fixes">#chatbox { font-size: 0.75em !important; } style + h1.page-title { font-size: 10px; } textarea, #textarea_content .sceditor-container textarea, form[action^="/privmsg"] .postbody .h3 { font-size: 0.9em; } .forabg ul.topiclist dl.icon dd.dterm, .postbody .content { font-size: 1em !important; } form[action^="/privmsg"] .postbody > *, form[action^="/privmsg"] ~ .panel .postbody > * { font-size: 18px !important; } /* Rules/Roles */ #rules-roles, #rules-roles p { font-size: 6px; line-height: 10px; } #rules-roles .header { font-size: 10px; } #rules-roles .sub-block ul { margin-bottom: 30px; } /* Awards List */ .panel .awardlist p { font-size: 6px; line-height: 10px; margin-bottom: 10px; } /* Recruitment */ #recruitment.panel .h3 { font-size: 10px; } #recruitment.panel p, #recruitment.panel ul { font-size: 6px; line-height: 10px; } #recruitment.panel .title, #recruitment.panel span.italics { font-size: 18px; } #recruitment.panel iframe { display: block; width: 100% !important; margin-bottom: 10px; }</style>');
+  
+  // browser detection
+  window.isOpera=!!window.opr&&!!opr.addons||!!window.opera||navigator.userAgent.indexOf(" OPR/")>=0,window.isFirefox="undefined"!=typeof InstallTrigger,window.isSafari=/constructor/i.test(window.HTMLElement)||"[object SafariRemoteNotification]"===(!window.safari||safari.pushNotification).toString(),window.isIE=!!document.documentMode,window.isEdge=!isIE&&!!window.StyleMedia,window.isChrome=!!window.chrome&&!!window.chrome.webstore,window.isBlink=(isChrome||isOpera)&&!!window.CSS;
+  
+  // lang var detection
+  if (!window._lang) window._lang = { Posts : 'Posts', PMs : 'PMs', rank_title : 'NOT_AVAILABLE', Reputation : 'Reputation', See_my_profile : 'View profile', Edit_profile : 'Edit profile', All_PMs : 'My private messages', Notif_see_all : 'See all the notifications', All_Topics : 'My Topics', All_Messages : 'My posts', js_topics_followed : 'Watched topics' }
+})();
+
+$(function() {
+  document.body.innerHTML = document.body.innerHTML.replace(/´/g, "\'");
+  $('#search_menu, #search-box').remove();
+  
+  if (_userdata.page_desktop)  {
+    $('head').append('<style>/* mobile [minified] */#mpage-body-modern{background-color:#000}#mpage-body-modern main>div:first-child>div[class]:first-child{display:none}.forum-icon{background-color:#999}.material-icons{font-family:\'Material Icons\'!important}.box,.box-subtle,.forum-section,.forum-section-wrap,.forum-section:before,.post-section{background-color:#262626}.forum-section[class*="_locked"],.forum-section[class*="_locked"]:before{background-color:rgba(255,0,0,.2)}.forum-section[class*="_locked"]:hover .forum-icon{background-color:red}.forum-section.cat_new,.forum-section.cat_new:before,.forum-section.folder_new,.forum-section.folder_new:before{background-color:#}.forum-section.cat_new .forum-icon,.forum-section.cat_new div.forum-statistics,.forum-section.folder_new .forum-icon,.forum-section.folder_new div.forum-statistics{background-color:#09E}.forum-section:hover div{text-shadow:0 0 1em #000,0 0 1em #000,0 0 1em #000}.forum-section:hover h3,.forum-section:hover i.material-icons,.post-content a:hover{color:#FFF;text-shadow:0 0 .1em #FFF,0 0 .1em #FFF,0 0 .1em #FFF}.box-login *,.input-subtle{text-shadow:none!important}.forum-content>h3,.post-content a{color:#4F6ECC;overflow:visible;border:none}.box-header,.forum-content>div,.forum-lastpost .lastpost-arrow:after,.post-content,.post-content blockquote:after,.post-info>h2{color:#80A5C2}.forum-content>div.forum-lastpost{margin-left:10px}.forum-content>div.forum-lastpost:before{content:'- '}#to-top:hover,.btn-subtle:hover,.forum-content>div.forum-statistics,.post-section>ul.post-buttons{color:#FFF;background-color:#09E;border:none}.forum-section-wrap .last-post-link{display:inline-block;bottom:16px}.mobile_title .mobile_next_button:after{border-radius:3px;color:#FFF;background-color:#222}.post-section .post-icon img{width:36px;height:36px}.post-section .post-content blockquote:before{display:none}#header .mobile_prev_button{margin-right:10px}.box-login .btn{font-weight:700;height:30px;line-height:30px}.btn-subtle{background-color:#999;font-weight:400}.box-login-btns-main .btn-subtle{margin:0 0 0 13px}</style>');
+    window.location.href = _userdata.page_desktop;
+  } else {
+    // Site Title
+    $('#site-title').css('opacity', 1).addClass('genocide');
+    /*
+    $('#site-title').blast({ delimiter: 'character' }).velocity("transition.flipYIn", { 
+      display: null,
+      duration: 1250,
+      stagger: 40,
+      delay: 400
+    });
+    */
+  }
+  
+  /\/profile\?mode=editprofile/.test(window.location.href) && $(function() {
+    if (_userdata.usergroup == 8) $('dl').filter(function() { return /<b>Status<\/b>/.test(this.innerHTML) }).remove();
+  });
+  
+  // $('a[href="/u17"] span strong').blast({ delimiter: 'character' });
+  
+  /*
+  $(function() {
+    $('#fa_icon').attr('href', 'http://help.forumotion.com/');
+  });
+  */
+  
+  $('dl[style*="_new"].icon').parents('li.row').addClass('new');
+  $('head').append('<style type="text/css" name="new-sections">li.row.new{background:linear-gradient(transparent,rgba(0,255,255,.2),transparent)!important}li.row.new a{color:#0CF}li.row.new a:hover{color:#FFF}</style>');
+});
+
+/* 01 - Remove Ads */
+(function adV() {
+  if ($('#main-content').html() && document.getElementById('main-content').firstChild) {
+    var mc = document.getElementById('main-content');
+    if (mc.firstChild.className != '') $(mc.firstChild).remove();
+  } else {
+    setTimeout(adV, 15);
+  }
+})();
+
+/*
+(function tool() {
+  if ($('#phpbb').html() && document.getElementById('phpbb').firstChild && document.getElementById('phpbb').firstChild.id) {
+    $('div[id^="fa_toolbar"]').remove();
+  } else {
+    setTimeout(tool, 15);
+  }
+})();
+*/
+
+/\/u\d+/.test(window.location.href) && (function prof() {
+  if ( $('#profile-advanced-right > div:has(mediaclic)').html() ) {
+    $('#profile-advanced-right > div:has(mediaclic)').remove()
+  } else {
+    setTimeout(prof, 15);
+  }
+})();
+
+/* 02 - Rank Titles/Smooth Anchors */
+/\/t\d+/.test(location.href) && $(function() {
+  $('.post').each(function() {
+    var poster = $(this).find('.postprofile a[href^="/u"]'),
+        // id = poster[0].href.replace(/.*\/(u\d+)/, '$1'),
+        avatar = (poster.find('img')[0] && poster.find('img')[0].alt == 'avatar' ? poster.find('img')[0] : null),
+        name = poster.find('strong') || poster.find('span'),
+        rank = $(this).find('.rank-name font')[0],
+        fields = $(this).find('.profile-fields')[0];
+
+    if (!rank) return;
+    
+    // console.log(Object.keys(css(name)).length + ' - ' + name.html());
+    // css(name).color ? $(rank).css(css(name)) : $(rank).css('color', name.css('color'));
+
+    if (css(name).color) $(rank).add(fields).css(css(name));
+    
+    // Spirit
+    if (/leader/i.test(rank.innerHTML)) $(rank).css('color', '#F70');
+    if (/u5$/i.test(poster[0].href)) console.log(css(name));
+    
+    $(rank.parentNode).add(fields).add(rank.parentNode.nextSibling).add(poster[0]).css({
+      'color': name.css('color'),
+      'text-shadow': name.css('text-shadow')
+    });
+    $(rank.parentNode).add(fields).css('text-shadow', css(name)['text-shadow']);
+    
+    if (/\sonline/.test(this.className) && rank.parentNode.nextSibling.lastChild) {
+      // $(avatar ? avatar.parentNode : '').add(rank.parentNode.nextSibling.lastChild).css('box-shadow', 'inset ' + css(name)['text-shadow']);
+      $(avatar ? avatar.parentNode : '').add(rank.parentNode.nextSibling.lastChild).css('box-shadow', 'inset ' + $(name).css('text-shadow'));
+      var o = $(this).find('.fa_online'),
+          s = o.attr('style'),
+          c = s.replace(/.*rgb\((.*)\);/, '$1'),
+          too_dark = c.replace(/(\d+)\,\s(\d+)\,\s(\d+)/, function(_, r, g, b) {
+            // console.log(name.html() + ' - rgb(' + r + ', ' + g + ', ' + b + ')');
+            var d = ((Number(r) < 50) && (Number(g) < 50) && (Number(b) < 50));
+            // console.log(d);
+            return d ? true : false
+          });
+
+      // if (too_dark) o.css('color', 'rgb(255, 255, 255)');
+    }
+    
+    var hex = rgb2hex(name.css('color')),
+        bg = midHex(midHex(hex, '#000000'), '#000000'),
+        realbg = midHex(bg, '#000000');
+
+    $(rank.parentNode.nextSibling.lastChild).css('background-color', realbg);
+    
+    if (url_egosearch && url_egosearch.split('where=').pop() == 'f3') {
+      if (!/leader|council|prestige|member|trial/.test(this.className) && $(this).find('.title')[0]) {
+        $(this).find('.title')[0].removeAttribute('style');
+      }
+    }
+  });
+});
+
+function rgb2hex(rgb){
+	rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+
+	return (rgb && rgb.length === 4) ? "#" +
+		("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+		("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+		("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+}
+
+function midHex(c1, c2) {
+	var c = '#',
+		i = 0;
+    for(; i < 3; i++) {
+      var sub1 = c1.substring(1+2*i, 3+2*i),
+		  sub2 = c2.substring(1+2*i, 3+2*i),
+		  v1 = parseInt(sub1, 16),
+		  v2 = parseInt(sub2, 16),
+		  v = Math.floor((v1 + v2) / 2),
+		  sub = v.toString(16).toUpperCase(),
+		  padsub = ('0'+sub).slice(-2);
+
+      c += padsub;
+    }
+
+	return c;
+}
+
+function css(a) {
+    var sheets = document.styleSheets, o = {}, s;
+  
+    for (var i in sheets) {
+      if (sheets[i].hasOwnProperty('rules')) {
+        var rules = sheets[i].rules || sheets[i].cssRules;
+        for (var r in rules) {
+            if (a.is(rules[r].selectorText)) {
+                o = $.extend(o, css2json(rules[r].style), css2json(a.attr('style')));
+            }
+        }
+      }
+    }
+    return o;
+}
+
+function css2json(css) {
+    var s = {};
+    if (!css) return s;
+    if (css instanceof CSSStyleDeclaration) {
+        for (var i in css) {
+            if ((css[i]).toLowerCase) {
+                s[(css[i]).toLowerCase()] = (css[css[i]]);
+            }
+        }
+    } else if (typeof css == "string") {
+        css = css.split("; ");
+        for (var i in css) {
+            var l = css[i].split(": ");
+            s[l[0].toLowerCase()] = (l[1]);
+        }
+    }
+    return s;
+}
+
+$(function() {
+    $('a[href^="#"]').click(function(event){
+         event.preventDefault();
+
+         var dest = 0, obj;
+         $(this.hash).offset() ? obj = this.hash : obj = '[name="' + this.hash.replace('#', '') + '"]';
+         if ( $(obj).offset().top > $(document).height() - $(window).height() ) {
+            dest = $(document).height() - $(window).height();
+         } else {
+             dest = $(obj).offset().top;
+         }
+
+         $('html,body').animate({scrollTop: dest}, 2500,'swing');
+    });
+});
+
+/*  03 - PostCards */
+$(function() {
+  'Developed by Ange Tuteur';
+  'No distribution without consent of the author';
+  'Origin : http://fmdesign.forumotion.com/t515-post-cards#7069';
+ 
+  var a = $('.postbody > div a'),
+      version = $('.bodylinewidth')[0] ? 0 : document.getElementById('wrap') ? 1 : $('div.pun')[0] ? 2 : document.getElementById('ipbwrapper') ? 3 : document.getElementById('fa_edge') ? 4 : 'badapple';
+ 
+  // error notifications
+  if (version == 'badapple' || !window.JSON || !window.localStorage) {
+    var errString = 'The plugin "fa_post_card" could not be executed because : ';
+ 
+    if (version == 'badapple') errString += '\nYour forum version is not supported.';
+    if (!window.JSON) errString += '\nJSON is not supported by your browser';
+    if (!window.localStorage) errString += '\nThe Storage API is not supported by your browser.';
+ 
+    window.console && console.error ? console.error(errString) : alert(errString);
+    return;
+  }
+ 
+  window.fa_post_card = {
+    summary_length : 250, // maximum character length for messages in post cards
+        cache_time : 1*60*60*1000, // amount of time that cards are cached ( 1 hour )
+ 
+    // language config
+    lang : {
+      error : {
+          name : 'Error',
+          title : 'POST NOT FOUND',
+        summary : 'The post you tried to view could not be found or is not accesible to you.'
+      },
+ 
+        no_name : 'Anonymous',
+      no_avatar : 'https://illiweb.com/fa/invision/pp-blank-thumb-38px.png',
+        no_title : 'No Title Available',
+      no_summary : 'No Summary Available',
+      no_origin : 'No Origin Available',
+        tooltip : 'Click to view the full post'
+    },
+ 
+          a : a, // anchor cache
+      index : -1, // anchor index
+      quota : a.length, // anchor cache total
+    version : version, // forum version
+ 
+    // selectors
+    select : {
+      content : ['.postbody > div', '.content > div', '.entry-content > div:first > div', '.post-entry > div:first', '.content > div'],
+        title : ['.postdetails:has(.sprite-icon_miniposted)', '.topic-title > a', '.posthead a', '.postbody-head a', '.topic-title'],
+        avatar : ['.poster-profile a img', '.postprofile dt img', '.user-basic-info img:first', '.postprofile dt img', '.postprofile .user-avatar img'],
+      username : ['.name', '.postprofile dt > strong', '.username', '.postprofile dt > strong', '.postprofile .username']
+    },
+ 
+    // escape HTML tags
+    sanitize : function(str) {
+      if (str) {
+        return str.replace(/<|>/gm, function(M) {
+          switch (M) {
+            case '<' :
+              return '<';
+ 
+            case '>' :
+              return '>';
+          }
+        });
+      } else {
+        return '';
+      }
+    },
+ 
+    // create the post card
+    createCard : function(anchor, post, ver) {
+      // variables for the card contents
+      var o = {
+        username : post ? $(fa_post_card.select.username[ver], post).text() : fa_post_card.lang.error.name,
+          avatar : post ? $(fa_post_card.select.avatar[ver], post).attr('src') : fa_post_card.lang.no_avatar,
+          title : post ? $(fa_post_card.select.title[ver], post).text() : fa_post_card.lang.error.title,
+        summary : post ? $(fa_post_card.select.content[ver], post).text() : fa_post_card.lang.error.summary,
+          origin : anchor.innerHTML
+      },
+      id = o.origin.replace(/.*?#(\d+)$/, '$1'),
+      cards = localStorage.fa_post_cards ? JSON.parse(localStorage.fa_post_cards) : {},
+      i;
+ 
+      // escape HTML tags to reduce risk of XSS attacks
+      for (i in o) {
+        o[i] = fa_post_card.sanitize(o[i]);
+      }
+      
+      o.username = post ? $(fa_post_card.select.username[ver], post).html().replace(/\?change_version=prosilver/, '') : fa_post_card.lang.error.name;
+ 
+      anchor.className += (!anchor.className ? '' : ' ') + 'fa_post_card';
+      anchor.title = fa_post_card.lang.tooltip;
+ 
+      // card structure
+      anchor.innerHTML = '<div class="fa_card_inner">'+
+        '<div class="fa_card_left">'+
+          '<img class="fa_card_avatar" src="' + ( o.avatar ? o.avatar : fa_post_card.lang.no_avatar ) + '"/>'+
+          '<div class="fa_card_username">' + ( o.username ? o.username : fa_post_card.lang.no_name ) + '</div>'+
+        '</div>'+
+ 
+        '<div class="fa_card_right">'+
+          '<div class="fa_card_title"><h2>' + ( o.title ? o.title : fa_post_card.lang.no_title ) + '</h2></div>'+
+          '<div class="fa_card_summary"><p>' + ( o.summary ? ( o.summary.length > fa_post_card.summary_length ? o.summary.slice(0, fa_post_card.summary_length) + '...' : o.summary ) : fa_post_card.lang.no_summary ) + '</p></div>'+
+          '<div class="fa_card_origin">' + ( o.origin ? o.origin.replace(/http:\/\//, '') : fa_post_card.lang.no_origin ) + '</div>'+
+        '</div>'+
+ 
+        '<div class="fa_card_clear"></div>'+
+      '</div>';
+ 
+      // store the card data to the cards object
+      if (!cards[anchor.host]) {
+        cards[anchor.host] = {};
+      }
+ 
+      cards[anchor.host]['card' + id] = {
+        data : anchor.innerHTML,
+        expires : +new Date
+      };
+ 
+      localStorage.fa_post_cards = JSON.stringify(cards);
+    },
+ 
+    // get and turn the link into a card
+    get : function() {
+      var a = fa_post_card.a[++fa_post_card.index],
+          cards = localStorage.fa_post_cards ? JSON.parse(localStorage.fa_post_cards) : {},
+          reg = /#\d+$/, // match the post hash
+          id,
+          post;
+ 
+      // make sure the anchor contains a hash in the href and html content
+      if (a && reg.test(a.innerHTML) && reg.test(a.href)) {
+        id = a.href.replace(/.*?#(\d+)$/, '$1'); // post id
+        post = $('.post--' + id)[0]; // post selector
+ 
+        // get the card data if it's cached
+        if (cards[a.host] && cards[a.host]['card' + id] && cards[a.host]['card' + id].data && cards[a.host]['card' + id].expires > +new Date - fa_post_card.cache_time) {
+          a.className += (!a.className ? '' : ' ') + 'fa_post_card';
+          a.title = fa_post_card.lang.tooltip;
+          a.innerHTML = cards[a.host]['card' + id].data;
+        } else {
+          // if the post is present on the page we'll get it by the id
+          if (post) {
+            fa_post_card.createCard(a, post, fa_post_card.version);
+          } else {
+            // otherwise we need to get the post data via AJAX
+            $.get(a.href.replace(reg, '') + '?change_version=prosilver', function(d) {
+              var post = $('.post--' + id, d)[0];
+              fa_post_card.createCard(a, post, new RegExp(window.location.host).test(a.href) ? fa_post_card.version : 1); // change the version to prosilver so it's possible to get external post cards
+            }).error(function() {
+              fa_post_card.createCard(a);
+            });
+          }
+        }
+      }
+ 
+      // continue iterating through the anchor array until we've reached the quota
+      if (fa_post_card.index < fa_post_card.quota) {
+        fa_post_card.get();
+      }
+    }
+ 
+  };
+ 
+  fa_post_card.get(); // start iterating the anchors
+  
+  $('head').append('<style type="text/css">.fa_post_card, .fa_card_left { border-radius: 0 !important; }</style>');
+});
+ 
+  
+document.write('<style type="text/css" name="post-card-css">a.fa_post_card{font-size:10px;font-weight:400;text-decoration:none!important;color:#80a5c2!important;background:#111;border:1px solid #333;border-radius:10px;display:block;width:600px;max-width:100%;min-height:100px;overflow:hidden;position:relative;margin:3px 0}.fa_card_inner{margin-left:125px}.fa_card_left{text-align:center;background:#222;border-right:1px solid #333;position:absolute;top:0;left:0;bottom:0;width:125px;border-radius:10px 0 0 10px!important}.fa_card_avatar{height:50px;width:50px;position:absolute;top:50%;left:50%;margin:-35px 0 0 -25px}.fa_card_username{font-size:12px;font-weight:700;position:absolute;top:50%;left:0;right:0;margin-top:20px;padding:0 10px}.fa_card_title h2{color:#CCC;font-size:14px;font-weight:700;border:none;margin:0}.fa_card_summary p{font-size:12px;margin:0}.fa_card_origin{color:#666}.fa_card_origin,.fa_card_summary p,.fa_card_title h2{padding:5px 10px}.fa_card_origin,.fa_card_title h2,.fa_card_username{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.fa_card_clear{clear:both}</style>');
+
+/* 04 - All Tooltipsters */
+$(document).ready(function(){
+  $(function() {
+/*
+      $('dd.lastpost span a[href^="/t"] img').each(function() {
+          var title = $(this).attr('alt');
+          $(this).parent().attr('title', title);
+          $(this).remove();
+      });
+  
+      $('div.navigation a[href^="/f"] img').each(function() {
+          var title = $(this).attr('alt');
+
+          /previous/i.test(this.alt)
+              ? $(this).parent().addClass('prev') : $(this).parent().addClass('next');
+
+          $(this).parent().attr('title', title);
+          $(this).remove();
+      });
+
+      $('div.navigation a[href^="/t"] img').each(function() {
+          var title = $(this).attr('alt');
+
+          /previous/i.test(this.alt)
+              ? $(this).parent().addClass('prev') : $(this).parent().addClass('next');
+
+          $(this).parent().attr('title', title);
+          $(this).remove();
+      });
+*/
+      $('a[href="#top"] img').each(function() {
+          var title = $(this).attr('alt');
+          $(this).parent().attr('title', title);
+          $(this).remove();
+      });
+
+      $('a[href="#bottom"] img').each(function() {
+          var title = $(this).attr('alt');
+          $(this).parent().attr('title', title);
+          $(this).remove();
+      });
+
+      $('input[class^="button"][value]').each(function() {
+          var title = $(this).attr('value');
+          $(this).attr('title', title);
+      });
+
+      $('select').change(function() {
+        $(this).tooltipster('destroy');
+        $(this).attr('title', $(this).find(':selected').text());
+        $(this).tooltipster();
+      });
+
+      $('select').each(function() {
+        $(this).attr('title', $(this).find(':selected').text());
+     });
+
+    $('[title]').not('dd').tooltipster();
+  });
+});
+
+/* 05 - Navlinks */
+$(function() {
+  $('.navbar .mainmenu').filter(function() { return /calendar|faq/.test(this.href) }).closest('li').remove();
+  
+  $('.navbar .mainmenu[href="/"]').text('Index');
+  $('.navbar .mainmenu[href="/memberlist"]').text('Users');
+  $('.navbar .mainmenu[href="/groups"]').text('Groups');
+  
+  $('.navbar .mainmenu[href="/search"]').removeAttr('onclick');
+  
+  // $('.navbar .mainmenu:has(.new-message)').addClass('new');
+  
+  var s = localStorage,
+      o = s.newPages ? JSON.parse(s.newPages) : {},
+      newPages = [], i = 0;
+  
+  for (; i < newPages.length; i++) {
+    var r = new RegExp(newPages[i], 'i');
+    
+    if (r.test(window.location.href)) {
+      o[newPages[i]] ? '' : o[newPages[i]] = true;
+    } else if (!o[newPages[i]]) {
+      $('.navbar .mainmenu[href*="' + newPages[i] + '"]').addClass('new');
+    }
+  }
+  
+  s.newPages = JSON.stringify(o);
+});
+
+/* 06 - 1 Topics to 1 Topic */
+$(function() {
+  $('li.row').find('dd.posts, dd.topics').each(function() {
+    var number = parseInt(this.textContent.replace(/(\d+).*/, '$1'));
+    if (number == 1) $(this).find('dfn')[0].innerHTML = $(this).find('dfn')[0].innerHTML.replace(/s$/, '').replace('ie', 'y');
+  });
+});
+
+/* 07 - UnHover
+$(function() {
+  for (var a = document.getElementsByTagName('A'), i = 0, j = a.length; i < j; i++) {
+    a[i].onmouseout = function() {
+      var t = this; // temporary cache
+      if (!/onmouseout/.test(t.className)) t.className += (t.className ? ' ' : '') + 'onmouseout';
+      
+      // remove the classname after a specified amount of time
+      window.setTimeout(function() {
+        t.className = t.className.replace(/\s?onmouseout/g, '');
+      }, 500); // duration of 0.500 seconds
+    }
+  }
+});
+*/
+
+/* 08 - Profile Tooltipster Preview */
+window.tooltipUsers = function(links) {
+  if (!_userdata.session_logged_in) return;
+  
+  var usersinfo = {},
+      admin = _userdata.user_level == 1,
+      mod = _userdata.user_level,
+      vesper = _userdata.user_id == 17;
+
+  links.tooltipster && links.not('.mentiontag, .tooltipstered').filter(function() {
+    if (!$(this).closest('#tabs')[0]) {
+      return this;
+    }
+  }).tooltipster({
+      animation: 'fade',
+      interactive: true,
+      contentAsHTML: true,
+      minWidth: 500,
+      maxWidth: 500,
+      delay: 500,
+      multiple: true,
+      theme: 'tooltipster-default profile',
+      autoClose: true,
+      content: 'Loading...',
+      functionBefore: function(origin, continueTooltip) {
+        continueTooltip();
+        
+        var userid = $(this).attr('href').replace(/.*?\/u(\d+).*/, '$1'),
+          // user_style = css(origin.find('span')),
+          user_color = origin.find('span').css('color');
+
+        // Localstorage maybe to speed up times every 30 minutes or so
+        var storage = window.localStorage,
+            cacheTime = 30, // time in minutes
+            info;
+        
+        if (origin.data('ajax') !== 'cached'/* || (origin.data('ajax') == 'cached' && userid == '282') */) {
+          if (storage) {
+            if (!storage.tooltipsters) storage.tooltipsters = JSON.stringify({});
+  
+            if (storage.tooltipsters) {
+              info = JSON.parse(storage.tooltipsters);
+  
+              if (info[userid] && info[userid].exp > new Date().getTime() - 60 * 1000 * cacheTime) {
+                origin.tooltipster('content', info[userid].content).data('ajax', 'cached');
+                $('.tooltipster-content [title]').tooltipster();
+                // if (/u282/.test($('div.header a')[0].href)) window.tooltipUsers($('div.header a'));
+              } else {
+                $.ajax({
+                  type: 'GET',
+                  url: "/ajax/index.php",
+                  dataType: "html",
+  
+                  data: {
+                    f: "m",
+                    user_id: userid
+                  },
+  
+                  success: function(html) {
+                    var container = document.createElement('div'),
+                        header, rank;
+  
+                    container.innerHTML = html;
+                    $(container).wrapInner('<div class="new-tooltip-container" />');
+                    
+                    header = $('.header', container);
+                    rank = $('.rank', container);
+                    
+                    // Header group color
+                    header.css({
+                      'background': user_color,
+                      'border-color': user_color
+                    });
+                    
+                    /* AJAX GET PROFILE INFO - WILL TAKE SOME TIME */
+                    var link = origin[0].href,
+                        id = link.replace(/.*\/u(\d+)/, '$1'),
+                        name = header.text();
+                    
+                    // Gets profile information
+                    $.ajax({
+                      url: link,
+                      // async: false,
+                      type: 'get',
+                      success: function(d) {
+                        var l = $('.module font', d)[0].innerHTML,
+                            n = $('#field_id1 div', d)[0].innerHTML,
+                            p = $('#field_id-13 div', d)[0].innerHTML,
+                            r = $('#field_id-14 div', d)[0].innerHTML,
+                            g = $('#field_id-7 div:first-child > img', d)[0] ? $('#field_id-7 div:first-child > img', d)[0].alt : $('#field_id-7 div:first-child', d)[0].innerHTML,
+                            j = $('#field_id-4 div', d)[0].innerHTML,
+                            s = $('#field_id3 div', d)[0].innerHTML,
+                            t = $('#field_id5 div:first-child li', d)[0],
+                            color = $('h1.page-title > span', d)[0].style.color,
+                            status = /online/i.test($('#profile-advanced-right .h3', d)[0].innerHTML) ? 'Online' : 'Offline',
+                            trauma = t ? t.innerHTML : null,
+                            bannable = $('a[href^="/modcp?mode=ban"]', d)[0],
+                            editable = $('a[href^="/admin/index.forum?mode=edit"]', d)[0],
+                            lastvisit;
+                        s = s.replace(/&nbsp;/g, '').trim();
+                        j = j.replace(/(\d+)-(\d+)-(\d+)/, function(_, c, b, a) {
+                          // Date fixes
+                          switch (b) {
+                            case '01': b = 'January'; break;
+                            case '02': b = 'February'; break;
+                            case '03': b = 'March'; break;
+                            case '04': b = 'April'; break;
+                            case '05': b = 'May'; break;
+                            case '06': b = 'June'; break;
+                            case '07': b = 'July'; break;
+                            case '08': b = 'August'; break;
+                            case '09': b = 'September'; break;
+                            case '10': b = 'October'; break;
+                            case '11': b = 'November'; break;
+                            case '12': b = 'December'; break;
+                          }
+  
+                          return (a.charAt(0) == '0' ? a.charAt(1) : a) + ' ' + b + ' ' + c
+                        });
+                        
+                        // Grabs the username
+                        $.ajax({
+                          url: '/memberlist?username=' + name,
+                          async: false,
+                          type: 'get',
+                          success: function(data) {
+                            lastvisit = $('.last-visit-date', data).html();
+                          }
+                        });
+                        
+                        // Profile Fields
+                        s != '-' ? $('.user-status', container).html(/.*&lt;-&gt;$/.test(s) ? s.replace('&lt;-&gt;', '') : s).addClass(/.*&lt;-&gt;$/.test(s) ? 'error' : null) : $('.user-status', container).html('This user does not have a status set.').addClass('unspecific');
+                        $('.rank', container).html(l).css('color', color); // no_bg ? color : user_color);
+                        $('.ign', container).html(n).css('color', color);
+                        $('.points', container).html(p);
+                        $('.reputation .number', container).html(r > 0 ? '+' + r : r);
+                        $('.reputation', container).addClass(r > 0 ? 'positive' : r < 0 ? 'negative' : 'zero');
+                        $('.joined', container).html(j);
+                        $('.status', container).html(status).attr('title', status);
+                        $('.status', container).addClass(status.toLowerCase());
+                        $('.status', container).after(' ' + lastvisit);
+                        $('.sex', container).html(g);
+                        
+                        // Traum Quiz
+                        if (trauma) {
+                          var circle = '<circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>',
+                              check_mark = '<path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>',
+                              x_mark = '<path class="checkmark__check" fill="none" d="M17.2 34.4 l17.2 -17.2 M17.2 17.2 l17.2 17.2"></path>',
+                              svg = '<svg class="checkmark' + (/failed/.test(trauma) ? ' false' : '') + '" viewBox="0 0 52 52">' + circle + (/passed/.test(trauma) ? check_mark : x_mark) + '</svg>';
+                          $('.trauma-quiz', container).html(svg);
+                        }
+                        
+                        // Official GeNociDe Account
+                        if (id == 1) {
+                          $('.user-status', container).html('Official Forum Account.').attr('class', 'user-status founder');
+                          $('.sex', container).html('Clan');
+                          $('.account a.action', container).addClass('disabled');
+                        }
+                        
+                        // Non-member statuses
+                        if ($('.rank', container).css('color') == 'rgb(153, 153, 153)') {
+                          $('.user-status', container).html('Non-Members are disallowed from making a status.').attr('class', 'user-status error');
+                        }
+  
+                        if (bannable) {
+                          $('.header', container).append('<a href="' + bannable.href + '" class="ban-member">Ban this member</a>');
+                        }
+                        
+                        if (admin) {
+                          if (editable && !$('.header a.username-change')[0]) {
+                                                      
+                            // alert('working on the tooltip extras :)');                          
+                            $('.header a:first-child', container).after('<a style="cursor: pointer" class="username-change edit" onclick="ttName.edit(this)"></a><a style="cursor: pointer; display: none" class="username-change submit" data-info="' + editable.href + '" onclick="ttName.submit(this)"></a><a style="display: none" class="username-change loading"></a>');
+                          }
+                        }
+                                                
+                        /*
+                        if (!$('a[href^="/profile?friend"]', container)[0]) {
+                          $('a[href^="/privmsg?mode=post"]').after('<a href="/profile?friend#" class="action disabled">Added!</a>');
+                        }
+                        */
+                    info[userid] = {
+                      content: container.innerHTML,
+                      exp: new Date().getTime()
+                    };
+                    
+                    origin.tooltipster('content', info[userid].content).data('ajax', 'cached');
+                    $('.tooltipster-content [title]').tooltipster();
+                    // if (/u282/.test($('div.header a')[0].href)) window.tooltipUsers($('div.header a'));
+                    storage.tooltipsters = JSON.stringify(info);
+                      }
+                    });
+                    /* END OF AJAX SHIT */
+                  }
+                });
+              }
+            }
+          } else {
+            console.log('localStorage is not supported.');
+          }
+        }
+
+        if (!$('#trauma-styles')[0]) $('head').append('<style type="text/css">.checkmark{width:100px;height:100px;border-radius:50%;display:inline-block;stroke-width:5;stroke:transparent;stroke-miterlimit:10;box-shadow:inset 0 0 0 #7ac142;animation:fill .4s ease-in-out .4s forwards,scale .3s ease-in-out .9s both}.checkmark__circle{stroke-dasharray:166;stroke-dashoffset:166;stroke-width:2;stroke-miterlimit:10;stroke:#7ac142;fill:none;animation:stroke .6s cubic-bezier(.65,0,.45,1) forwards}.checkmark__check{transform-origin:50% 50%;stroke-dasharray:48;stroke-dashoffset:48;animation:stroke .3s cubic-bezier(.65,0,.45,1) 1s forwards}.checkmark.false{box-shadow:inset 0 0 0 #c14942;animation:fill_false .4s ease-in-out .4s forwards,scale .3s ease-in-out .9s both}.checkmark.false .checkmark__circle{stroke:#c14942}@keyframes stroke{100%{stroke-dashoffset:0}}@keyframes scale{0%,100%{transform:none}50%{transform:scale3d(1.1,1.1,1)}}@keyframes fill{0%{stroke:#fff}100%{stroke:#fff;box-shadow:inset 0 0 0 50px #7ac142}}@keyframes fill_false{0%{stroke:#fff}100%{stroke:#fff;box-shadow:inset 0 0 0 50px #c14942}}</style>');
+        if (!$('#tooltip-styles')[0]) $('head').append('<style type="text/css" id="admin-tooltip-styles">.tooltipster-content .header a[contenteditable]:empty:after{content:"0";font-size:0}.username-change{display:inline-block;vertical-align:top}.username-change:hover{animation:toggle .3s ease-in-out}.username-change:after{font-family:FontAwesome!important;font-size:12px;margin-left:10px;font-weight:400}.username-change.edit:after{content:"\\f044"}.username-change.submit:after{content:"\\f00c"}a.username-change.loading:after{content:"\\f021";display:inline-block;animation:spin 2s linear infinite}@keyframes toggle{0%,100%{transform:rotate(0)}33%{transform:rotate(15deg)}66%{transform:rotate(-15deg)}}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.tooltipster-content .header{position:relative}input.new-username{background:0 0;color:#FFF;font-weight:700;text-shadow:0 0 1em #000,0 0 1em #000,0 0 1em #000;border:none;box-shadow:none;vertical-align:text-bottom}.tooltipster-content .header .ban-member{color:#000;font-size:.8em;position:absolute;right:1em}.tooltipster-content .header .ban-member:hover{color:#FFF;text-shadow:0 0 .1em red,0 0 .1em red,0 0 .1em red}a.faux-input{background-color:#FFF;color:#000!important;border-style:solid;border-width:1px;padding:3px 5px;font-size:.8em;transition:border-style 0s,border-width: .75s}</style>');
+
+        window.ttName = {
+          edit: function(element) {
+            var e = element,
+              name = e.previousSibling,
+              s = e.nextSibling,
+              default_name = name.innerHTML;
+        
+            if (e.style.display != 'none') {
+              $(e).css('display', 'none');
+              $(name).attr('contenteditable', 'true').addClass('faux-input').focus();
+              $(s).css('display', '');
+              
+              $(name).keydown(function(e) {
+                var keycode = e.charCode || e.keyCode;
+                
+                console.log(this.innerHTML);
+                console.log(default_name);
+                if (keycode == 13) {
+                  if (this.innerHTML != '' && this.innerHTML != default_name) {
+                    ttName.submit(s);
+                  }
+                  return false;
+                }
+              });
+            }
+          },
+        
+          submit: function(element) {
+            var e = element,
+              name = e.previousSibling.previousSibling,
+              l = e.nextSibling,
+              m = e.previousSibling,
+              link = $(e).attr('data-info'),
+              new_name, id = name.href.replace(/.*u(\d+)/, '$1'), t;
+        
+            if (e.style.display != 'none') {
+              new_name = name.innerHTML;
+        
+              $(l).css('display', '');
+              $(e).css('display', 'none');
+              
+              
+              // Updates user account
+              $.ajax({
+                url: link,
+                type: 'get',
+                success: function(d) {
+                  var o = {};
+        
+                  $('#post [name]', d).filter(function() {
+                    return !(this.type == 'radio' && !this.checked)
+                  }).each(function() {
+                    o[this.name] = this.value;
+                  });
+                  
+                  for (var i in o) {
+                    if (/^avatar|del/i.test(i)) delete o[i];
+                  }
+        
+                  o.username_edit = new_name;
+                  
+                  // pls dont delete
+                  $.ajax({
+                    url: link,
+                    type: 'post',
+                    data: o,
+                    success: function() {
+                      console.log('AJAX POST complete.');
+        
+                      $(l).css('display', 'none');
+                      $(name).removeAttr('contenteditable').removeClass('faux-input');
+                      $(m).css('display', '');
+                      
+                      $('a[href$="/u' + id + '"] span strong').html(new_name);
+                      removeFromStorage(id);
+                      
+                      /*
+                      t = localStorage.tooltipsters ? JSON.parse(localStorage.tooltipsters) : {};
+                      if (t[id]) {
+                        delete t[id];
+                        localStorage.tooltipsters = JSON.stringify(t);
+                      }
+                      */
+                    }
+                  });
+        
+                }
+              });
+            }
+          }
+        };
+      }
+  });
+};
+  
+$(function() {
+  var l = $('a[href^="/u"]:has(span[style] > strong)').filter(function() {
+    if (this.firstChild && this.firstChild.tagName) {
+      if (this.firstChild.tagName != 'IMG') {
+        return this;
+      }
+    } else {
+      return this;
+    }
+  });
+  
+  window.tooltipUsers(l);
+});
+
+window.removeFromStorage = function(x) {
+  var t = localStorage.tooltipsters ? JSON.parse(localStorage.tooltipsters) : false,
+    no_tooltip_storage = 'There are no tooltipsters stored within your localStorage.',
+    not_in_tooltip_storage = 'User ID ' + x + ' is not within your localStorage.',
+    success = 'User ID ' + x + ' has successfully been removed from your localStorage.';
+
+  if (!t) {
+    // checks for localStorage.tooltipsters
+    console.warn(no_tooltip_storage);
+    return;
+  }
+
+  if (!t[x]) {
+    // checks for localStorage.tooltipsters[x]
+    console.warn(not_in_tooltip_storage);
+    return;
+  }
+
+  // deletes the variable
+  delete t[x];
+
+  localStorage.tooltipsters = JSON.stringify(t);
+  console.log(success);
+};
+
+/* 09 - Path Changer */
+$(function() {
+  var path = '-',
+ 
+  paths = {
+    'forum' : $('p.nomargin.path:has(a)'),
+    'topic' : $('div.pathname-box p:has(a)'),
+    'mcp' : $('form div.topic-actions p:has(a)'),
+    'search' : $('div.topic-actions p:has(a)')
+  },
+ 
+  i;
+ 
+  for ( i in paths ) {
+    if ( paths[i][0] ) paths[i].html(paths[i].html().replace(/::/g, path));
+  }
+});
+
+/* 10 - SyncEditor */
+$(function() {
+    'SyncEditor Version v0.6 © 2016';
+    'Developed by Ace 1';
+    'All rights reserved.';
+ 
+    var lang = {
+          preview: 'Preview', // ALL VERSIONS
+          subject: 'Subject', // PHPBB2
+          appearance: 'This is how your post will appear once submitted' // PUNBB
+        },
+        select_code = false,
+        preview_button_on = false;
+ 
+    if ((/\/t\d+/.test(window.location.href) || /\/(post|privmsg|(post\?(f|t|p)=\d+&mode=(newtopic|reply|quote|editpost)))/.test(window.location.href)) && $.sceditor) {
+ 
+        if ($.sceditor) {
+            var preview,
+ 
+                version = $('.bodylinewidth')[0] ? 0 : document.getElementById('wrap') ? 1 : $('div.pun')[0] ? 2 : document.getElementById('ipbwrapper') ? 3 : document.getElementById('fa_edge') ? 4 : '',
+ 
+                simplePreview = [
+                    '<table class="forumline preview" width="100%" border="0" cellspacing="1" cellpadding="4"><tbody><tr><th class="thHead" height="25">' + lang.preview + '</th></tr><tr><td class="row1"><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><div class="postbody"></div></td></tr></tbody></table></td></tr><tr><td class="spaceRow" height="1"></td></tr></tbody></table><br clear="all">',
+                    '<div id="preview" class="post row2"><div class="h3">' + lang.preview + '</div><div class="content" style="min-height: inherit"></div></div>',
+                    '<div class="main-head clearfix preview"><p class="h2">' + lang.preview + '</p></div><div class="main-content topic" style="text-align: left;"><div class="post"><div class="postmain" style="margin-left: 0;"><div class="posthead"><h2>' + lang.appearance + '.</h2></div><div class="postbody"><div class="post-entry"><div class="entry-content"></div></div></div></div></div></div>',
+                    '<div id="preview" class="post borderwrap" style="background-color: #e4e6e9"><div class="maintitle clearfix"><h3>' + lang.preview + '</h3></div><div class="post-entry row1"></div></div>',
+                    '<div id="preview" class="content-block post"><div class="title">' + lang.preview + '</div><div class="post-inner"><div class="postbody"><div class="content"></div></div></div></div>'
+                ][version],
+ 
+                createSimplePreview = function() {
+                    version == 0 // PHPBB2
+                        ? $('form[action="/viewforum"]').before(simplePreview)
+                        : (
+                          version == 1 || version == 4 // PHPBB3 && EDGE
+                            ? $('#quick_reply').after(simplePreview)
+                            : (
+                              version == 2 // PUNBB
+                                ? $('#quick_reply').append(simplePreview)
+                                : (
+                                  version == 3 // INVISION
+                                    ? $('#qpost').after(simplePreview)
+                                    : ''
+                                )
+                            )
+                        )
+                },
+ 
+                advancedPreview = [
+                    '<table class="forumline preview" width="100%" border="0" cellspacing="1" cellpadding="4"><tbody><tr><th class="thHead" height="25">' + lang.preview + '</th></tr><tr><td class="row1"><span class="postdetails"><img src="https://illiweb.com/fa/empty.gif" alt="Post" title="Post" border="0">' + lang.subject + ': <img src="https://illiweb.com/fa/empty.gif" alt="" border="0"><span style="user-select: none !important; color: transparent !important; text-shadow: none !important; background: none !important;"><3</span>' + formatDate() + '</span></td></tr><tr><td class="row1"><table width="100%" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td><div class="postbody"></div></td></tr></tbody></table></td></tr><tr><td class="spaceRow" height="1"><img src="https://illiweb.com/fa/empty.gif" height="1" width="1" alt=""></td></tr></tbody></table><br clear="all">',
+                    '<div id="preview" class="post row2"><div class="inner"><span class="corners-top"><span></span></span><div class="postbody"><div class="h3">' + lang.preview + '</div><div class="content"></div></div><span class="corners-bottom"><span></span></span></div></div>',
+                    '<div class="main-head clearfix preview"><p class="h2">' + lang.preview + '</p></div><div class="main-content topic"><div class="post"><div class="postmain"><div class="posthead"><h2>' + lang.appearance + '.</h2></div><div class="postbody"><div class="user"><h4 class="user-ident"><span class="username">' + _userdata.username + '</span></h4></div><div class="post-entry"><div class="entry-content"></div></div></div></div></div></div>',
+                    '<div id="preview" class="post borderwrap"><div class="maintitle clearfix"><h3>' + lang.preview + '</h3></div><div class="postbody"><div class="post-entry row1"></div></div></div>',
+                    simplePreview + '<hr>'
+                ][version],
+ 
+                createAdvancedPreview = function() {
+                    version == 0 // PHPBB2
+                        ? $('form[action="/post"]').before(advancedPreview)
+                        : (
+                          version == 1 || version == 4 // PHPBB3 && EDGE
+                            ? $('h1.page-title').after(advancedPreview)
+                            : (
+                              version == 2 // PUNBB
+                                ? $('form.frm-form').prepend(advancedPreview)
+                                : (
+                                  version == 3 // INVISION
+                                    ? $('ul#navstrip').after(advancedPreview)
+                                    : ''
+                                )
+                            )
+                        )
+                },
+ 
+                actualContainer = [
+                    '.preview .row1 table .postbody',
+                    '#preview .content',
+                    /* form.frm-form */ '.preview .entry-content',
+                    '#preview .post-entry',
+                    '#preview .content'
+                ][version],
+               
+                removeandreplaceCurrent = function() {
+                  preview = actualContainer.split(/\s/).shift();
+                  $(preview).remove();
+                  createAdvancedPreview();
+                 
+                  if (version == 4) $(preview).next().remove();
+                };
+ 
+            if ( version == 0 && document.forms.post.subject ) {
+                document.forms.post.subject.oninput = function() {
+                    var v = this.value;
+                    $('span.postdetails').eq(0).contents().filter(function() {return this.nodeType == 3})[0].textContent = 'Subject: ' + (v == 'undefined' ? '' : v);
+                };
+            }
+ 
+            function formatDate() {
+                var d = Date(),
+                    y = new Date().getFullYear(),
+                    m = new Date().getMinutes(),
+                    s = new Date().getSeconds(),
+                    n = d.indexOf(m + ':' + s),
+                    realDate = d.substring(0, n + 5);
+                realDate = realDate.slice(0, realDate.indexOf(y) + 4) + " - " + realDate.slice(realDate.indexOf(y) + 5);
+                return realDate;
+            }
+         
+            /(\/t\d+)|privmsg/.test(window.location.href)
+                ? createSimplePreview()
+                : (
+                  /\/post\?(f|t|p)=\d+&mode=(newtopic|reply|quote|editpost)/.test(window.location.href)
+                      ? createAdvancedPreview()
+                      : removeandreplaceCurrent()
+                )
+        }
+ 
+        $('#text_editor_textarea').ready(function() {
+          if (isMobile == true) return false;
+            var instance = $('#text_editor_textarea').sceditor('instance'),
+                sceditorContent, previewContent,
+ 
+                convert = function() {
+                    sceditorContent = instance.val();
+                    previewContent = instance.fromBBCode(sceditorContent, false);
+                    $(actualContainer).html(previewContent);
+             
+                    // Quote Parsing
+                    if (/\[quote.*\]/i.test(sceditorContent) && /\[\/quote\]/i.test(sceditorContent)) {
+                      if (version == 0) {
+                          $(actualContainer)[0].innerHTML = $(actualContainer)[0].innerHTML
+                            .replace(/\<blockquote\>/g, '<dl class="codebox">')
+                            .replace(/\<\/blockquote\>/g, '</dl>')
+                            .replace(/\<cite\>/g, '<dt><span class="genmed"><b><a href="#" rel="nofollow">')
+                            .replace(/\<\/cite\>/g, '</a> wrote:</b></span></dt>');
+
+                          $('dl.codebox > dt', actualContainer).each(function() {
+                              $(this).parent().contents().filter(function() {
+                                  return this.tagName != 'DT' && this.className != 'code'
+                              }).wrapAll('<dd class="quote" />');
+                          });
+
+                          $('dl.codebox', actualContainer).each(function() {
+                              $(this).parent().contents().filter(function() {
+                                  return this.className != 'codebox'
+                              }).wrapAll('<span class="postbody" />');
+                          });
+                      } else {
+                          $('blockquote', actualContainer).wrapInner('<div />');
+                          $('blockquote cite', actualContainer).wrapInner('<a href="#" rel="nofollow" />');
+                          $('blockquote cite', actualContainer).append(' wrote:');
+                      }
+                    }
+                  
+                    // Code Parsing
+                    if (/\[code]/i.test(sceditorContent) && /\[\/code\]/i.test(sceditorContent)) {
+                      var codeTitle = 'Code:' + (select_code ? selection : '');
+                      $('code', actualContainer).wrap('<dl class="codebox" />');
+
+                      $('.codebox code', actualContainer).before('<dt>' + (version == 0 ? '<span class="genmed"><b>' + codeTitle + '</b></span>' : codeTitle) + '</dt>').wrap('<dd' + (version == 0 ? ' class="code"' : '') + ' />');
+                      $('dd.code', actualContainer).wrapInner('<div class="cont_code" />');
+                      if ($('div.cont_code', actualContainer)[0]) ($('div.cont_code', actualContainer)[0].firstChild).contents().unwrap('code');
+                    }
+ 
+                    // Spoiler
+                    if (/\[spoiler.*\]/i.test(sceditorContent) && /\[\/spoiler\]/i.test(sceditorContent)) {
+                      $.sceditor.plugins.bbcode.bbcode.set('spoiler', {
+                          tags: {
+                              'div': {
+                                  'class': ['spoiler']
+                              }
+                          },
+                          format: '[spoiler]{0}[/spoiler]',
+                          html: function(token, attrs, content) {
+                              var a = attrs.defaultattr,
+                                  c = content;
+                              if (a == undefined || a == '' || a == '"' || a == '\'') a = 'Spoiler';
+                              if (a && (a.charAt(0) == '"' || a.charAt(0) == '\'')) a = a.replace(/("|')/, '');
+
+                            c = (version == 0 ? '<dt style="cursor: pointer;">' + a + ':</dt><dd class="spoiler_closed">&nbsp;</dd><dd><div class="spoiler_content hidden">' + c + '</div></dd>' : '<dt style="cursor: pointer;">' + a + ':</dt><dd><div class="spoiler_content">' + c + '</div></dd>');
+
+                              return '<dl class="codebox spoiler">' + c + '</dl>';
+                          }
+                      });
+                    }
+                  
+                    // Smilies
+                    var s, s2, re;
+ 
+                    for (s in smileys) {
+                        if ($(actualContainer).html() && $(actualContainer).html().indexOf(s) != -1) {
+                            /\W/.test(s.replace(/:/g, '')) ? s2 = s.replace(/(.{1})/g, '\\$1') : s2 = s;
+                            re = new RegExp(s2, 'gi');
+                            $(actualContainer).html($(actualContainer).html().replace(re, '<img src="' + smileys[s] + '" class="smiley" />'));
+                        }
+                    }
+                  
+                    // Headings For PHPBB2 && PunBB
+                    if (version == 0 || version == 2) {
+                        $.sceditor.plugins.bbcode.bbcode.set('h2', {tags: { 'h2': null }, format: '[h2]{0}[/h2]',html: '<h2 class="post-content">{0}</h2>'});
+                        $.sceditor.plugins.bbcode.bbcode.set('h3', {tags: { 'h3': null }, format: '[h3]{0}[/h3]',html: '<h3 class="post-content">{0}</h3>'});
+                        $.sceditor.plugins.bbcode.bbcode.set('h4', {tags: { 'h4': null }, format: '[h4]{0}[/h4]',html: '<h4 class="post-content">{0}</h4>'});
+                    }
+ 
+                    // Scroll
+                    if (/\[scroll.*\]/i.test(sceditorContent) && /\[\/scroll\]/i.test(sceditorContent)) {
+                      $.sceditor.plugins.bbcode.bbcode.set('scroll', {
+                          tags: {
+                              'marquee': null
+                          },
+                          format: '[scroll]{0}[/scroll]',
+                          html: function(token, attrs, content) {
+                              var c = content;
+                              c = '<marquee>' + c + '</marquee>';
+
+                              return '<span>' + c + '</span>';
+                          }
+                      });
+                    }
+                    // Updown
+                    if (/\[updown.*\]/i.test(sceditorContent) && /\[\/updown\]/i.test(sceditorContent)) {
+                      $.sceditor.plugins.bbcode.bbcode.set('updown', {
+                          tags: {
+                              'marquee': {
+                                  'direction': null
+                              }
+                          },
+                          format: '[updown]{0}[/updown]',
+                          html: function(token, attrs, content) {
+                              var c = content;
+                              c = '<marquee direction="up" scrollamount="1" style="height: 60px;">' + c + '</marquee>';
+
+                              return '<span>' + c + '</span>';
+                          }
+                      });
+                    }
+                };
+ 
+            /\/(post|privmsg|(post\?(f|t|p)=\d+&mode=(newtopic|reply|quote|editpost)))/.test(window.location.href) ? convert() : '';
+ 
+            instance.bind('focus blur keydown keyup nodechanged', function() { convert(); });
+ 
+            $('.sceditor-button').not('.sceditor-button-source').click(function() {
+                convert();
+                $('.sceditor-dropdown div').find('.button', '.sceditor-fontsize-option', 'sceditor-header-option').on('click', function() {
+                // $('.sceditor-dropdown div input.button').add('.sceditor-header-picker *').add('.sceditor-dropdown a.sceditor-fontsize-option').add('.sceditor-dropdown a.sceditor-fontsize-option > *').on('click', function() {
+                    convert()
+                });
+                $('.sceditor-color-option').click(function() { setTimeout(convert, 100) });
+                // $('.smiley-element > img').click(function() { setTimeout(convert, 100) });
+            });
+ 
+        });
+      
+        // Preview Option
+        var toggle_preview_html = '<label>Toggle Preview <input type="checkbox" id="preview-content"><span class="checkbox-toggle"></span></label>';
+        
+        $('#preview .h3').append(toggle_preview_html);
+        if (!localStorage.previewHTML || localStorage.previewHTML != 'true') {
+          // localStorage.previewHTML == 'false' || undefined
+          $('#preview .h3').next().remove();
+        } else {
+          $('#preview .h3').addClass('on');
+          $('input#preview-content').prop('checked', true);
+        }
+        
+        $('#preview-content').click(function() {
+          var h = $(this).parents('.h3'),
+              c = h.next();
+        
+          c[0] ? c.remove() : h.after('<div class="content" style="min-height: inherit"></div>');
+          localStorage.previewHTML = c[0] ? false : true;
+          h.toggleClass('on');
+        });
+        
+      if (!$('[name="preview-content-styles"]')[0]) $('head').append('<style type="text/css" name="preview-content-styles">#preview .inner{padding:0!important}#preview .h3{color:red}#preview .h3.on{color:#0F0}#preview .h3 label{font-size:.9em;line-height:20px;font-weight:400;text-transform:none;position:relative;margin:0 10px}#preview .h3 label:before{position:absolute;content:"";background-color:#80A5C2;width:1px;height:100%;top:0;left:-6px}span.checkbox-toggle,span.checkbox-toggle:before{border-radius:50px}span.checkbox-toggle{position:relative;width:30px;height:18px;background-color:red;display:inline-block;vertical-align:top;overflow:hidden;cursor:pointer}span.checkbox-toggle:before{content:"";position:absolute;height:14px;width:14px;top:2px;left:2px;background-color:#600;transition:left .4s,color .75s,background-color .75s}input:checked+span.checkbox-toggle{background-color:#0F0}input:checked+span.checkbox-toggle:before{left:14px;background-color:#060}label:active span.checkbox-toggle:before{transition:all .2s;transform:scale(.5)}#preview-content{display:none}</style>');
+
+     
+        if (version == 4) $('head').append('<style type="text/css">#quick_reply + #preview .post-inner { margin: 0 5px; }</style>');
+      	if (version == 1) $('head').append('<style type="text/css">[name=quickreply]+.h3+br+#quick_reply input[type=submit]{margin-bottom:25px}#quick_reply+#preview{padding:5px 10px}#quick_reply+#preview .h3{margin:3px 0}#quick_reply+#preview .content{font-size:1.3em;padding:1px}#preview .content font {line-height: normal}</style>');
+        !preview_button_on ? $(document.forms.post.preview).remove() : '';
+    }
+ 
+    /*** Progress
+    var logs = {
+        v0.1 : 'Developed SyncEditor',
+        v0.2 : 'Implemented Smilies -- Bug fixes for phpbb2',
+        v0.3 : 'Optimized for FAE -- Smilies are completely operational -- Fixed quoting problems -- Minor bug fixes for all versions',
+        v0.4 : 'Language data',
+        v0.5 : 'Fully optimized for FAE -- Fixed preview button bug',
+        v0.6 : 'Fixed instances of lag when typing a lot of text -- Colors now display automatically -- Minor bug fixes'
+    };
+    ***/
+});
+
+/* 11 - _userdata.usergroup */
+$(function() {
+  '_userdata.usergroup ©️️ 2017 Version 5.0';
+  'Developed by Ace 1';
+  'All rights reserved';
+ 
+  window.faGroups = {
+    groupIDs: [1, 2, 3], // list of groupIDs
+    cacheTime: 30, // time in minutes to store data
+ 
+    multipleGroups: false, // enable to return all groups the user is in
+ 
+    storage: window.localStorage,
+    user_id: _userdata.session_logged_in ? _userdata.user_id : 0,
+ 
+    setGroup: function() {
+      var group,
+          i = 0, j;
+ 
+      if (faGroups.storage && faGroups.user_id > 0) {
+        if (!faGroups.storage['ug' + faGroups.user_id] || !(faGroups.storage['ug' + faGroups.user_id + '_exp'] > new Date().getTime() - faGroups.cacheTime * 60 * 1000)) {
+          $.ajax({
+            url: '/groups',
+            type: 'get',
+            async: false,
+            success: function(d) {
+              if (faGroups.multipleGroups) group = [];
+         
+              for (; i < faGroups.groupIDs.length; i++) {
+                j = $('ul.noList a[href^="/g' + faGroups.groupIDs[i] + '-', d);
+ 
+                if (j[0]) {
+                  if (!faGroups.multipleGroups) {
+                    group = faGroups.groupIDs[i];
+                    i = faGroups.groupIDs.length;
+                  } else {
+                    group.push(faGroups.groupIDs[i]);
+                  }
+                }
+              }
+             
+              faGroups.storage['ug' + faGroups.user_id] = group ? JSON.stringify(group) : group;
+              faGroups.storage['ug' + faGroups.user_id + '_exp'] = new Date().getTime();
+            }
+          });
+        }
+ 
+        // sets _userdata.usergroup to the user's current group
+        if (faGroups.storage['ug' + faGroups.user_id] != 'undefined') {
+          try {
+            _userdata.usergroup = JSON.parse(faGroups.storage['ug' + faGroups.user_id]);
+          } catch(e) {
+            _userdata.usergroup = faGroups.storage['ug' + faGroups.user_id];
+          }
+        } else {
+          _userdata.usergroup = -1; // user not within any group
+        }
+      } else {
+        _userdata.usergroup = 0; // _userdata.session_logged_in == 0
+      }
+    },
+ 
+    returnGroups: function() {
+      if (!_userdata.usergroup) return;
+ 
+      return JSON.parse(faGroups.storage['ug' + faGroups.user_id]);
+    },
+ 
+    checkGroups: function() {
+      var groups_to_check = [].slice.apply(arguments),
+          user_groups,
+          in_groups;
+ 
+      if (groups_to_check.length < 1 || !_userdata.usergroup) return;
+ 
+      user_groups = _userdata.usergroup;
+ 
+      if (typeof user_groups == 'object') {
+        // usergroup == array
+   
+        if (groups_to_check.length > 1) {
+          // arguments == array
+          in_groups = user_groups.every(function(val) {
+            return groups_to_check.indexOf(val) > -1;
+          });
+     
+          return in_groups ? true : false;
+        } else {
+          // arguments == string
+          return user_groups.indexOf(groups_to_check[0]) > -1 ? true : false;
+        }
+      } else {
+        // usergroup == string
+   
+        if (groups_to_check.length > 1) {
+          // arguments == array
+          return false;
+     
+        } else {
+          // arguments == string
+          return groups_to_check[0] == user_groups ? true : false;
+        }
+      }
+    }
+  };
+ 
+  faGroups.setGroup();
+ 
+  /*** Progress
+    var logs = {
+      'Version 1.0': 'Developed',
+      'Version 2.0': 'Enabled values -1 and 0 (no groups and not logged in, respectively)',
+      'Version 3.0': 'Enhanced and simplified',
+      'Version 4.0': 'Enabled multipleGroups, returnGroups(), checkGroups(args)'
+      'Version 5.0': 'Patched unexpected tokens in JSON as well as errors when _userdata.session_logged_in == 0'
+    };
+  ***/
+});
+
+/* 12 - Topic Icon Removal (besides applications) */
+/(?:\/post\?f=\d+&mode=|\/privmsg\?mode=)/.test(window.location.href) && $(function() {
+  if (/f=3/.test(window.location.href)) return;
+  $('.fields1 dl').each(function() {
+    if ($(this).find('label')[0] && $(this).find('label')[0].innerHTML == 'Topic Icon') $(this).remove();
+  });
+});
+
+/* 13 - Member Profile Name Colors/Dual Colors */
+/\/u\d+/.test(window.location.href) && $(function() { 
+  var userID = window.location.pathname.match(/u\d+/)[0],
+      
+  nodes = [$('h1.page-title strong')[0], $('.h3 strong')[0], $('#cp-main h1 strong')[0]];
+  
+  $(nodes).addClass(userID);
+  
+  if ($('div[style="text-align:center;"] font')[0]) {
+    var u = $('h1.page-title strong > span')[0] ? $('h1.page-title strong > span') : $('h1.page-title strong'),
+        c = css(u),
+        t = $('div[style="text-align:center;"] font');
+    
+    c.color ? t.css(c) : t.css('color', u.parents('span').css('color'));
+  }
+});
+
+// Dual Colors
+
+function dualColor(user, first, second, space) {
+  var a = document.getElementsByTagName('A'),
+      i = 0,
+      link = '/u' + user,
+      re = new RegExp(link, 'i'),
+      tag,
+      n, s, p;
+  
+  for (; i < a.length; i++) {
+    if (!re.test(a[i].href) || (a[i].getElementsByTagName('img')[0] && a[i].firstChild == a[i].lastChild)) continue;
+    n = $(a[i]).find('strong')[0] ? $(a[i]).find('strong') : $(a[i]);
+    s = space == true ? ' ' : '';
+    
+    if (n.find('span')[0]) continue;
+    
+    tag = a[i].innerHTML.charAt(0) == '@' ? '@' : '';
+    
+    n.html('<span>' + tag +  first + '</span>' + s + '<span>' + second + '</span>');
+    
+    
+    if (n.parents('.postprofile')[0]) {
+      p = n.parents('.postprofile').find('dd font');
+      p.addClass(first.toLowerCase());
+      
+      p[0].innerHTML = p[0].innerHTML.replace(/(.*)\s(.*)/, function(_, a, b, c, d) {
+        var h = '<span>' + a + '</span> <span>' + b + '</span>';
+        return /council|prestige|official|unofficial/i.test(a) ? h : d;
+      });
+    }
+  }
+  
+  if (re.test(window.location.href)) {
+    $(':not(a) > span[style] > strong').addClass(first.toLowerCase().css('text-shadow', '0 0 1em, 0 0 1em, 0 0 1em'));
+  }
+}
+
+$(function() {
+  // dualColor(282, 'Purple', 'Monster', true);
+  // dualColor(453, 'Ch', 'rose');
+});
+
+/* 14 - Personal Titles */
+$(function() {
+  'Personal Title - Give yourself your own personal title !';
+  'DEVELOPED BY ANGE TUTEUR';
+  'NO DISTRIBUTION WITHOUT CONSENT OF THE AUTHOR';
+  'ORIGIN : http://fmdesign.forumotion.com/';
+  if (/\/profile|\/u\d+/.test(window.location.href)) {
+    for (var a = document.getElementsByTagName('dt'), b, i = 0, j = a.length; i < j; i++, (a[i] ? b = a[i].parentNode : '')) {
+      if (/Personal\sTitle/.test(a[i].innerHTML) && $(b).find('textarea')[0]) {
+        console.log(a);
+        console.log(b);
+        var c = $(b).find('textarea')[0];
+        console.log(c);
+        c.value = c.value.replace(/\n|\r/g, '').replace(/\[table class="fa_personal_title"\]\[tr\]\[td\](.*)\[\/td\]\[\/tr\]\[\/table\]/, '$1');
+
+        c.maxlength = 250;
+        
+        $(c).on('input', function() {
+          if (/\[url|!important|founder|admin|moderator|graphic designer/ig.test(this.value)) {
+            alert('A word in your title has been forbidden from use as a personal title. Please choose a different title.');
+            this.value = ''
+          }
+        });
+
+        $(document.forms.post).submit(function() {
+          c.maxlength = 15000;
+          c.value = '[table class="fa_personal_title"][tr][td]' + c.value.replace(/\n/g, ' ') + '[/td][/tr][/table]';
+          // [table class="fa_personal_title"][tr][td][/td][/tr][/table]
+        });
+        
+        $(function() {
+          if (_userdata.usergroup == 8) $(c).parents('dl').remove();
+        });
+      }
+    }
+  } else if (/\/t\d+/.test(window.location.href)) {
+    var html = true,
+      a = $('.fa_personal_title'),
+      i = 0,
+      j = a.length,
+      node, str, title;
+    for (; i < j; i++) {
+      title = $('td', a[i]).eq(0).filter(function() {
+        return html ? $(this).html() : $(this).text()
+      });
+      // console.log(a[i].innerHTML);
+      if (title) {
+        // console.log($(a[i]).closest('.postprofile').find('dt + dd').text());
+        $(a[i]).hide().closest('.postprofile').find('.rank-name').append($('<span class="personal_title" />').filter(function() {
+          return html ? $(this).html(title) : $(this).text(title)
+        }))
+      }
+    }
+    
+    $('head').append('<style type="text/css" name="personal-title">.personal_title img { max-width:140px !important; max-height:50px !important; } .personal_title, .personal_title * { font-size: 10px !important; font-weight: bold; }</style>');
+  }
+  
+  if (/\/u\d+/.test(window.location.href) || /\/profile\?mode/.test(window.location.href)) {
+    var active = document.getElementsByClassName("activetab")[0];
+    if (active.previousSibling) active.previousSibling.className = "prevtab";
+  }
+});
+
+/* 15 - Activity in the user profile */
+/\/u\d+/.test(window.location.href) && $(function() {
+  var b = document.createElement('div'),
+      lang = {
+        activity: 'Activity',
+        loading: 'Checking activity...',
+        offline: 'Offline',
+        last: 'Last active',
+        none: ''
+      },
+      first_module = '#profile-advanced-right .module:first',
+      placeholder = '<p class="viewing"><a href="#" onclick="return false;" class="loading">' + lang.loading + '</a><span class="lastactive"><span>' + lang.last + ': ' + lang.loading + '</span></span></p>';
+
+  b.innerHTML = '<div class="module"><div class="inner"><span class="corners-top"><span></span></span><div class="h3">' + lang.activity + '</div>' + placeholder + '<span class="corners-bottom"><span></span></span></div></div>';
+
+  $(first_module).after(b);
+  
+  $.get('/viewonline', function(data) {
+    var p = $('p', first_module + ' + div')[0],
+        c = '.forumbg tr:has(a[href="/u' + window.location.pathname.match(/u(\d+)/)[1] + '"]) td',
+        name = $('h1.page-title strong').html();
+    
+    p.innerHTML = $(c + ':last', data).html();
+    
+    if (!p.innerHTML.length) {
+      p.innerHTML = '<a href="#" onclick="return false;" class="inactive">' + lang.offline + '</a><div class="lastactive"><span>' + lang.last + ': <span id="last-active">' + lang.none + '</span></span></div>';
+
+      $.get('/memberlist?username=' + name, function(data2) {
+        var l = $('.last-visit-date', data2).first().html();
+        
+        $('#last-active', p).html(l);
+        $('.lastactive > span', p).css('opacity', 1);
+      });
+    } else {
+      console.log(p.innerHTML);
+      p.innerHTML += '<div class="lastactive"><span>' + lang.last + ': <span id="last-active">' + $(c + ':eq(1)', data).html() + '</span></span></div>';
+      window.activeHTML = p.innerHTML;
+      p.innerHTML = p.innerHTML.replace(/-active">.*, \d+/, '-active">Today at');    
+      
+      setTimeout(function() {
+        $('.lastactive > span', p).css('opacity', 1);
+      }, 100);
+    }
+  });
+
+  $('head').append('<style type="text/css">.viewing .lastactive,.viewing a{text-decoration:none;text-align:center;font-size:11px;font-weight:700;border:1px solid #CCC;border-radius:3px;display:block;padding:5px 3px;margin:5px 0}.viewing a{color:#6C6!important}.viewing a[href*="/"]:hover{background-color:#6C6;color:#000!important;text-shadow:0 0 .1em,0 0 .1em,0 0 .1em}.viewing a.loading{color:#CC6!important;text-shadow:1px 1px 0 #000;pointer-events:none}.viewing a.inactive{color:#C66!important;text-shadow:1px 1px 0 #000;pointer-events:none}.lastactive>span{opacity:0}</style>');
+});
+
+/* 16 - No gender mod/genocide clan gender/trauma quiz removal */
+/\/profile\?mode=editprofile/.test(window.location.href) && $(function() {
+  $('dl dt').filter(function() {
+    return /traumatize/i.test(this.innerHTML)
+  }).parent().remove();
+  
+  $('#profile_field_16_-7').prepend('<li><label><input type="radio" name="profile_field_16_-7" value="0" />&nbsp;N/A<img src="https://illiweb.com/fa/empty.gif" alt="Unspecified" class="tooltipstered"></label></li>');
+});
+
+/\/u1$/.test(window.location.href) && $(function() {
+  $('#field_id-7 div:first-child').html('Clan');
+});
+
+/* 17 - User Avatar Before Mentions */
+(function() {
+  return;
+  'DEVELOPED BY ANGE TUTEUR';
+  'NO DISTRIBUTION WITHOUT CONSENT OF THE AUTHOR';
+  'ORIGIN : http://fmdesign.forumotion.com/t399-display-the-user-avatar-before-mentions#3207';
+ 
+  window.faMentionAvatar = {
+    // position modifies the position of the avatar
+    // 0 = before mention
+    // 1 = after mention
+    position : 0,
+    cacheTime : 60, // amount of time the avatar is cached (minutes)
+   
+    mentions : null, // mention node list
+    index : -1, // current index in the mentions array
+   
+    // checks if the mention is valid and then gets the avatar
+    getter : function() {
+      var mention = faMentionAvatar.mentions[++faMentionAvatar.index],
+          storage = window.localStorage,
+          mentions = storage.mentionAvatars ? JSON.parse(storage.mentionAvatars) : {},
+          id;
+      
+      // error notifications
+      if (!window.JSON || !window.localStorage) {
+        var errString = 'The user avatars could not be loaded - ';
+     
+        if (!window.JSON) errString += 'JSON is not supported by your browser';
+        if (!window.localStorage) errString += 'The Storage API is not supported by your browser.';
+     
+        window.console && console.error ? console.error(errString) : alert(errString);
+        return;
+      }
+      
+      if (mention) {
+        id = mention.href.replace(/.*?\/u/, '');
+       
+        if (mentions[id] && mentions[id].avatar && mentions[id].exp > new Date().getTime() - faMentionAvatar.cacheTime * 60 * 1000) {
+          var avatar = document.createElement('IMG');
+          avatar.className += ' mention-ava';
+          avatar.src = mentions[id].avatar;
+          faMentionAvatar.position ? mention.appendChild(avatar) : mention.insertBefore(avatar, mention.firstChild);
+          faMentionAvatar.getter();
+        } else {
+          $.get('/ajax/index.php?f=m&user_id=' + id, function(d) {
+            var avatar = $('.account a > img', d)[0];
+               
+            if (avatar) {
+              faMentionAvatar.position ? mention.appendChild(avatar) : mention.insertBefore(avatar, mention.firstChild);
+             
+              if (mentions) {
+                mentions[id] = {
+                  avatar : avatar.src,
+                  exp : new Date().getTime()
+                };
+                
+                storage.mentionAvatars = JSON.stringify(mentions);
+              }
+            }
+            faMentionAvatar.getter();
+          });
+        }
+      }
+    }
+  };
+ 
+  // write the stylesheet into the HEAD section
+  document.write('<style type="text/css">.mentiontag img { height:20px; width:20px; vertical-align:middle; border-radius:100px; background:#FFF; box-shadow:0px 1px 1px rgba(0, 0, 0, 0.3), 0px -0px 1px rgba(0, 0, 0, 0.3); margin:1px 3px; padding:1px; }img.mention-ava[src$="avatar-default.png"] { display: none; }</style>');
+ 
+  $(function() {
+  // statements that need execution when the document is ready
+  $(function() {
+    faMentionAvatar.mentions = $('.mentiontag').filter(function() {
+      /* if (!$(this).parents('strike').html()) */ return this
+    }).each(function() {
+        // $(this).tooltipster('content', 'Viewing profile: ' + this.innerHTML.replace(/^@/, ''));
+    });
+    // faMentionAvatar.getter();
+  });
+  });
+}());
+
+/* 18 - Colorize the code tags */
+!/template|request|rules-tips|new-game/.test(location.href) && $(function() {
+  var a = $("dl.codebox dd").find("code, div.cont_code");
+  0 != a.length && $.ajax({
+    url: "http://yandex.st/highlightjs/8.0/highlight.min.js",
+    cache: !0,
+    dataType: "script",
+    success: function() {
+      hljs.configure({
+        useBR: !0
+      });
+      a.each(function(a, b) {
+        hljs.highlightBlock(b)
+      })
+    }
+  })
+});
+
+/* 19 - Those that edit their apps */
+/\/post.*mode=editpost/.test(location.href) && $(function() {
+  if (!localStorage.applications) return;
+  
+  $(function() {
+    if (_userdata.usergroup != 8 && _userdata.usergroup != 11 && _userdata.usergroup > 0) {
+      localStorage.removeItem(applications);
+      return;
+    }
+    
+    var apps = JSON.parse(localStorage.applications),
+        a, i = 0, f = false,
+        s = $('input[name="post"]');
+    
+    for (; i < apps.length; i++) {
+      if (location.href.indexOf(apps[i]) != -1) {
+        f = true;
+        a = apps[i];
+      }
+    }
+    
+    if (f == false) return;
+    
+    alert('You are attempting to edit your application. This will get your application denied.\n\nIt is imperative that you return to the Index.');
+    
+    s.removeAttr('name tabindex accesskey');
+    s[0].type = 'button';
+    s[0].onclick = (function(link) {
+      return function() {
+        $.get('/report?mode=report&p=' + link, function(d) {
+          console.log(link);
+          $.post('/report?mode=report&p=' + link, {
+            reason: 5,
+            message: 'I have went through GREAT lengths to edit my application and believe that I have done so. Even after being warned.',
+            post: 1
+          }).done(function() {
+            location.href = '/f3-applications'
+          });
+        });
+        
+        return false;
+      }
+    })(a);
+    
+  });
+});
+
+/* 20 - Profile Deletion Option Removed */
+/\/profile\?mode=editprofile/.test(location.href) && $(function() {
+  $('[name="delete_user"]').parents('.panel').eq(0).remove();
+});
+
+/* 21 - "Edit this page" feature */
+(function() {
+  'edit this page';
+  'by ace 1';
+  
+  window.fa_special_edits = {
+    lang: {
+      edit: 'Edit this',
+      page: 'page',
+      forum: 'forum',
+      category: 'category',
+      group: 'group'
+    },
+    
+    title: [
+      // phpbb3 && fa edge
+      'h1.page-title',
+      
+      // punbb
+      '.main-head h2',
+      
+      // invision
+      '[class="borderwrap"] .maintitle :header'
+    ],
+ 
+    text: function(type) {
+      return fa_special_edits.lang.edit + ' ' + (type == 1 ? fa_special_edits.lang.page : type == 2 ? fa_special_edits.lang.forum : type == 3 ? fa_special_edits.lang.category : fa_special_edits.lang.group)
+    },
+    style: '<style type="text/css" name="page-title-link">.edit-link{font-size:0.6em;margin-left:5px;vertical-align:top}</style>',
+    version: function() {
+      return $('#wrap, #fa_edge')[0] ? 0 : $('div.pun')[0] ? 1 : document.getElementById('ipbwrapper') ? 2 : -1
+    },
+    admin: 'a[href^="/admin/index.forum"]',
+    pageIDs: {
+      html: location.href.replace(/.*\/h(\d+)-.*/, '$1'),
+      forums: location.href.replace(/.*\/f(\d+).*/, '$1'),
+      cats: location.href.replace(/.*\/c(\d+)-.*/, '$1'),
+      groups: location.href.replace(/.*\/g(\d+)-.*/, '$1')
+    },
+ 
+    editID: function(pageID, type) {
+      var edit_link;
+ 
+      switch (type) {
+        case 1:
+          edit_link = '/admin/index.forum?part=modules&sub=html&mode=go_edit&page=' + pageID + '&editor=html&extended_admin=1';
+          break;
+        case 2:
+          edit_link = '/admin/index.forum?part=general&sub=general&mode=edit&extended_admin=1&fid=f' + pageID;
+          break;
+        case 3:
+          edit_link = '/admin/index.forum?part=general&sub=general&mode=edit&extended_admin=1&fid=c' + pageID;
+          break;
+        case 4:
+          edit_link = '/admin/index.forum?part=users_groups&sub=groups&g=' + pageID + '&mode=editgroup&extended_admin=1';
+          break;
+      }
+ 
+      return edit_link;
+    },
+ 
+    init: function() {
+      if (fa_special_edits.version() < 0) {
+        console.warn('This forum does not support the edit page plugin. Visit the following URL for help:');
+        console.log('http://fmdesign.forumotion.com/t1406-edit-this-page-feature');
+        return;
+      }
+      
+      fa_special_edits.title = fa_special_edits.title[fa_special_edits.version()];
+
+      var title = $(fa_special_edits.title).first(),
+          admin_link = $(fa_special_edits.admin),
+          adminID;
+ 
+      if (!admin_link[0]) return;
+ 
+      adminID = admin_link[0].href.replace(/.*part=admin(.*)/, '$1');
+ 
+      switch (true) {
+         
+        // HTML Pages
+        case /\/h\d+-/.test(location.href):
+          if (!title[0]) return;
+          title.append('<a href="' + fa_special_edits.editID(fa_special_edits.pageIDs.html, 1) + '" class="edit-link">[' + fa_special_edits.text(1) + ']</a>');
+          break;
+         
+        // Forums
+        case /\/f\d+[p]?\d*-/.test(location.href):
+          if (!title[0]) return;
+          title.append('<a href="' + fa_special_edits.editID(fa_special_edits.pageIDs.forums, 2) + '" class="edit-link">[' + fa_special_edits.text(2) + ']</a>');
+          break;
+         
+        // Categories
+        case /\/c\d+-/.test(location.href):
+          if (fa_special_edits.version == 0) {
+            var category_name = document.getElementsByTagName('title')[0].innerHTML;
+            if (!title[0]) title = $('<h1 class="page-title">' + category_name + '</h1>');
+            $('p.right.rightside + p').after(title);
+          }
+          if (!title) return;
+          title.append('<a href="' + fa_special_edits.editID(fa_special_edits.pageIDs.cats, 3) + '" class="edit-link">[' + fa_special_edits.text(3) + ']</a>');
+          break;
+         
+        // Groups
+        case /\/g\d+-/.test(location.href):
+          if (!title[0]) return;
+          title.append('<a href="' + fa_special_edits.editID(fa_special_edits.pageIDs.groups, 4) + '" class="edit-link">[' + fa_special_edits.text(4) + ']</a>');
+          break;
+      }
+      
+      if (!$('.edit-link')[0]) {
+        console.warn('An error occurred when appending the link [Edit Pages Plugin]\n\nVisit the thread on http://fmdesign.forumotion.com for assistance.');
+        return;
+      }
+     
+      $('.edit-link')[0].href += adminID;
+ 
+      $('head').append(fa_special_edits.style);
+    }
+  };
+ 
+  /(?:\/h\d+-)|(?:\/f\d+[p]?\d*-)|(?:\/c\d+-)|(?:\/g\d+-)/.test(location.href) && $(function() {
+    fa_special_edits.init();
+  });
+})();
+
+/* 22 - CSS/JS under Administration Panel */
+$(function() {
+  'Admin Panel Links © 2017';
+  ' -- ';
+  'Just something useful for forum admins';
+
+  if (_userdata.user_level != 1) return;
+  
+  var lang = {
+        templates: 'General Templates',
+        css: 'CSS Stylesheet',
+        js: 'JS Management'
+      },
+     
+      tooltipstered = false,
+ 
+      admin = $('.copyright a[href^="/admin/index.forum"]'),
+      session_id = admin[0].href.replace(/.*\&tid=(.*)/, '$1'),
+      template_link = '/admin/index.forum?mode=main&part=themes&sub=templates',
+      css_link = '/admin/index.forum?part=themes&sub=logos&mode=css&extended_admin=1',
+      js_link = '/admin/index.forum?part=modules&sub=html&mode=js&extended_admin=1',
+      separator = '<span class="admin-separator">|</span>',
+      admin_html = '<a href="' + css_link + '&tid=' + session_id + '" class="admin-link">' + lang.css + '</a>' + separator + '<a href="' + js_link + '&tid=' + session_id + '" class="admin-link">' + lang.js + '</a>';
+ 
+  if (_userdata.user_id == 1) {
+    admin_html = '<a href="' + template_link + '&tid=' + session_id + '" class="admin-link">' + lang.templates + '</a>' + separator + admin_html;
+  }
+  
+  if (tooltipstered) {
+    admin.parent().tooltipster && admin.parent().tooltipster({
+      interactive: true,
+      contentAsHTML: true,
+      delay: 500,
+      content: admin_html
+    });
+  } else {
+    admin.parent().append(admin_html);
+  }
+  $('head').append('<style type="text/css" name="admin-links">.admin-separator{display:inline-block;margin:0 5px}</style>');
+});
+
+/* 23 - Select code feature */
+$.getScript('https://cdn.jsdelivr.net/clipboard.js/1.5.16/clipboard.min.js', function() {
+  window.selectCode = {
+    copy : 'Copy Code',
+    copied : 'Copied !'
+  };
+ 
+  $(function() {
+    var a = $('.codebox dt').not('.spoiler > dt, .hidecode > dt'),
+        i = 0,
+        j = a.length;
+ 
+    if (a[0]) {
+      $('head').append('<style type="text/css">.select-code {cursor:pointer;float:right;}.select-code:hover{color:white;}</style>');
+ 
+      for (; i < j; i++) {
+        a[i].insertAdjacentHTML('beforeend', '<span class="select-code">' + selectCode.copy + '</span>');
+      }
+ 
+      new Clipboard('.select-code',{
+        target : function (copy) {
+          if (copy.innerHTML != selectCode.copied) {
+            return $(copy).closest('.codebox').find('.cont_code, code')[0];
+          }
+        }
+ 
+      }).on('success', function (e) {
+        var copy = e.trigger;
+ 
+        if (copy.innerHTML != selectCode.copied) {
+          copy.innerHTML = selectCode.copied;
+          copy.className += ' fm-copied';
+ 
+          window.setTimeout(function() {
+            copy.innerHTML = selectCode.copy;
+            copy.className = copy.className.replace('fm-copied', '');
+          }, 1000);
+        }
+ 
+        e.clearSelection();
+      });
+    }
+ 
+  });
+});
+
+/* 24 - Chatbox functions */
+$(window).load(function() {
+  // Auto-Login
+  var chatbox_script_al = function() {
+    setTimeout(function() {
+      $('#chatbox_option_co:visible').click()
+    }, 1000);
+  },
+      
+  // Chatbox Title
+  chatbox_script_ct = function() {
+    $('a.chat-title').text('GeNo Chatbox');
+  },
+      
+  // Remove (dis)connected messages
+  chatbox_script_m = function() {
+    var overrided = Chatbox.prototype.refresh;
+    $('#chatbox > p > .msg > span').filter('[style="color:green"], [style="color:red"]').closest('p').remove();
+    
+
+    Chatbox.prototype.refresh = function(data) {
+      if (data.messages && data.messages.length) {
+        data.messages = $.grep(data.messages, function(v) {
+          return v.userId != -10 || $.inArray(v.msgColor, ['red', 'green']) == -1;
+        });
+      }
+      overrided.call(this, data);
+    };
+  },
+  
+  // Moderator Prefix (&& Colon Colors)
+  chatbox_script_mp = function() {
+    var overrided = Chatbox.prototype.refresh;
+    var dc = function(dataUser, first, second, space) {
+        $('.chatbox-username').each(function() {
+          if ($(this).attr('data-user') != dataUser) return true;
+
+          var t = this,
+            s = space == true ? ' ' : '';
+
+          if ($(t).find('span')[0]) return true;
+          $(t).html('<span>' + first + '</span>' + s + '<span>' + second + '</span>');
+        });
+      };
+    Chatbox.prototype.refresh = function(data) {
+      overrided.call(this, data);
+      $('.chatbox-username').each(function() {
+        this.previousSibling && $.trim(this.previousSibling.nodeValue) == '@' && $(this.previousSibling).replaceWith('');
+        this.nextSibling && $.trim(this.nextSibling.nodeValue) == ':' && $(this.nextSibling).replaceWith('');
+        $(this).addClass('chat-user');
+        $('#message').focus();
+
+        // Dual Colors
+        // dc(282, 'Purple', 'Monster', true);
+      });
+    };
+  };
+  
+
+  var cbScripts = ['al', 'ct', 'm', 'mp'],
+      i = 0,
+      s = document.createElement('script');
+  
+  $('object[data^="/chatbox/index.forum"],iframe[src^="/chatbox/index.forum"], #chatbox').each(function() {
+    for (; i < cbScripts.length; i++) {
+      s.text = '(' + eval('chatbox_script_' + cbScripts[i]).toString() + ')();';
+      s.type = 'text/javascript';
+      console.log(s);
+      try {
+        if (!/\/chatbox\//.test(location.href)) {
+          $(this.contentDocument || this.contentWindow.document).find('#chatbox').closest('html').find('head').first().each(function() {
+            this.appendChild(s.cloneNode(true))
+          });
+        } else {
+          $('body.chatbox').prev()[0].appendChild(s.cloneNode(true));
+        }
+      } catch (a) {}
+    }
+  });
+});
+
+/* 25 - Fake GeNo List/Application Warning */
+window.topic_warnings = {
+  html: (content, important) => '<div class="geno-warning' + (important === true ? ' important' : '') + '">' + content +  '</div>',
+  css: '<style type="text/css">.geno-warning{font-weight:bold;margin:10px 0 !important}.geno-warning.important{color:#F00}.geno-warning+dl+#smiley-box{margin-top:15px}</style>'
+};
+
+/\/post\?f=\d+\&mode=newtopic/.test(location.href) && $(function() {
+  var application = 'Make sure you\'ve read and understood the recruitment process as well as the topics stickied in the <a href="/f3-">Applications section</a>.',
+      fake_geno = 'Remember to put the name of the fake player in the topic title.',
+      page = Number(location.href.replace(/.*\/post\?f=(\d+)\&mode=newtopic/, '$1')),
+      warning = '';
+  
+  switch (page) {
+    case 3: warning = topic_warnings.html(application); break;
+    case 12: warning = topic_warnings.html(fake_geno, true); break;
+    default: return;
+  }
+  
+  $('fieldset script + dl').first().before(warning);
+  $('fieldset script + div').first().before(topic_warnings.css);
+});
+
+/* 26 - Mentiontag Nicknames */
+$(function() {
+  'DEVELOPED BY ANGE TUTEUR';
+  'NO DISTRIBUTION WITHOUT CONSENT OF THE AUTHOR';
+  'ORIGIN : http://fmdesign.forumotion.com/t883-nicknames-for-mentions#17741';
+ 
+  if (!window.localStorage || !window.JSON) {
+    if (window.console && console.error) {
+      console.error('Your browser does not support the Storage API or JSON.');
+    }
+    return;
+  }
+ 
+  // parsing tags with nicknames
+  window.faMentionNickname = {
+    cache_time : 1, // time in hours
+    show_original : false, // shows the default @handle if set to true
+    original_tooltip : "{USERNAME}'s original @handle",
+ 
+    tag : $('.mentiontag'),
+    index : -1,
+    data : localStorage.fa_mention_nicks ? JSON.parse(localStorage.fa_mention_nicks) : {},
+ 
+    next : function() {
+      var tag = faMentionNickname.tag[++faMentionNickname.index],
+          id;
+ 
+      if (tag) {
+        id = tag.href.replace(/.*?\/u(\d+).*/, '$1');
+ 
+        if (faMentionNickname.data[id] && faMentionNickname.data[id].expires > +new Date - (faMentionNickname.cache_time * 60 * 60 * 1000)) {
+ 
+          if (faMentionNickname.data[id].nickname) {
+            tag.innerHTML = tag.innerHTML.replace(/@.*?$/, '@' + faMentionNickname.data[id].nickname);
+ 
+            if (faMentionNickname.show_original) {
+              tag.insertAdjacentHTML('afterend', '<span class="mentiontag-original" title="' + faMentionNickname.original_tooltip.replace('{USERNAME}', faMentionNickname.data[id].original) + '">(@' + faMentionNickname.data[id].original + ')</span>');
+            }
+ 
+          }
+ 
+          faMentionNickname.next();
+ 
+        } else {
+          $.get(tag.href, function(d) {
+            var nickname = $('.fa_nickname', d).text(),
+                original = tag.innerHTML.replace(/.*?@(.*)/, '$1').toLowerCase();
+ 
+            if (nickname) {
+              tag.innerHTML = tag.innerHTML.replace(/@.*?$/, '@' + nickname);
+ 
+              if (faMentionNickname.show_original) {
+                tag.insertAdjacentHTML('afterend', '<span class="mentiontag-original" title="' + faMentionNickname.original_tooltip.replace('{USERNAME}', original) + '">(@' + original + ')</span>');
+              }
+ 
+            } else {
+              nickname = null;
+            }
+ 
+            faMentionNickname.data[id] = {
+              nickname : nickname,
+              original : original,
+              expires : +new Date
+            };
+ 
+            localStorage.fa_mention_nicks = JSON.stringify(faMentionNickname.data);
+            faMentionNickname.next();
+          });
+        }
+ 
+      }
+ 
+    }
+  };
+ 
+  faMentionNickname.next();
+ 
+  // editing of profile field
+  if (/\/profile|\/u\d+/.test(window.location.href)) {
+    for (var a = document.getElementsByTagName('dt'), b, i = 0, j = a.length; i < j; i++, (a[i] ? b = a[i].parentNode : '')) {
+      if (/Nickname/.test(a[i].innerHTML) && $(b).find('textarea')[0]) {
+        var c = $(b).find('textarea')[0];
+        c.value = c.value.replace(/.*\[td\](.*)\[\/td\].*/, '$1');
+        c.maxlength = 25;
+
+        $(document.forms.post).submit(function() {
+          c.value = '[table class="fa_nickname"][tr][td]' + c.value + '[/td][/tr][/table]';
+        });
+        
+        $(function() {
+          if (_userdata.usergroup == 8) $(c).parents('dl').remove();
+        });
+      }
+    }
+  }
+
+  $('head').append('<style type="text/css">.mentiontag-original { color:rgba(0, 0, 0, 0.5); font-size:9px; font-style:italic; font-family:Arial, sans-serif; vertical-align:super; margin-left:3px; cursor:help; }.mentiontag-original:hover { color:rgba(0, 0, 0, 1); }</style>');
+});
+
+/* 28 - Tab Closal Prevention (while posting) */
+/* Show warning when the browser is closed - by Zzbaivong */
+$(function() {
+  $(function() {
+    if ($.sceditor) {
+      var $win = $(window),
+        $editor = $("#text_editor_textarea").sceditor("instance"),
+        firstVal = $editor.val();
+      $win.on("beforeunload", function() {
+        if ($editor.val() !== firstVal) return "Your post may not be saved.";
+      });
+      $("form[name='post']").on("submit", function() {
+        $win.off("beforeunload");
+      });
+    }
+  });
+});
+
+/* 29 - Mention Suggestion */
+!window.fa_mentionner && !/\/privmsg|\/profile\?mode=editprofile&page_profil=signature/.test(window.location.href) && $(function(){$(function(){
+  'SCEDITOR @HANDLE AUTO-SUGGEST';
+  'DEVELOPED BY ANGE TUTEUR';
+  'NO DISTRIBUTION WITHOUT CONSENT OF THE AUTHOR';
+  'ORIGIN : http://fmdesign.forumotion.com/t943-auto-suggest-mentions-as-you-type#19157';
+ 
+  var container = $('.sceditor-container')[0],
+      text_editor = document.getElementById('text_editor_textarea'),
+      frame,
+      instance;
+ 
+  if (container && text_editor) {
+ 
+    frame = $('iframe', container);
+    instance = $(text_editor).sceditor('instance');
+ 
+    window.fa_mentionner = {
+      suggest_delay : 100, // delay before suggestions show up (100ms)
+ 
+      // language presets
+      lang : {
+        placeholder : 'Searching...',
+        not_found : 'User not found'
+      },
+ 
+      // colors of the suggestion popup
+      color : {
+              font : '#8AC',
+        hover_font : '#FFF',
+        error_font : '#F00',
+ 
+              background : '#222',
+        hover_background : '#69C',
+ 
+        border : '#000',
+        shadow : 'rgba(0, 0, 0, 0.176)'
+      },
+ 
+      // sceditor instance and rangeHelper
+      instance : instance,
+      rangeHelper : instance.getRangeHelper(),
+ 
+      // cached nodes for listening and modifications
+      frame : frame[0],
+      body : frame.contents().find('body')[0],
+      textarea : $('textarea', container)[0],
+ 
+      // faux textarea and suggestion list
+      faux_textarea : $('<div id="faux_text_editor" />')[0], // helps us mirror the cursor position in source mode
+      list : $('<div id="fa_mention_suggestions" style="position:absolute;" />')[0],
+ 
+      // version specific selectors
+      selectors : $('.bodyline')[0] ? ['a.gen[href^="/u"]', '.avatar.mini a'] :
+                  document.getElementById('ipbwrapper') ? ['.membername', '.mini-avatar'] :
+                  null,
+ 
+ 
+      // adjusts the scroll position of the faux textarea so the caret stays in line
+      adjustScroll : function() {
+        fa_mentionner.faux_textarea.scrollTop = fa_mentionner.textarea.scrollTop;
+      },
+ 
+ 
+      // updates the content in the faux textarea
+      updateFauxTextarea : function(active, key) {
+        if (key == 16) { // 16 = SHIFT
+          return; // return when specific keys are pressed
+        }
+ 
+        // clear suggestion queue when suggestions aren't active
+        if (active != true) {
+          fa_mentionner.clearSuggestions();
+        } else {
+          return; // return when interactive keys are pressed while suggesting ; up, down, enter
+        }
+ 
+        // use another method if in WYSIWYG mode
+        if (!fa_mentionner.instance.inSourceMode()) {
+          key != 32 ? fa_mentionner.searchWYSIWYG() : fa_mentionner.clearSuggestions();
+          return;
+        }
+ 
+        var val = fa_mentionner.instance.val(),
+            range = 0,
+            selection,
+            faux_caret,
+            username;
+ 
+        // get the position of the caret
+        if (document.selection) {
+          selection = document.selection.createRange();
+          selection.moveStart('character', -fa_mentionner.textarea.length);
+          range = selection.text.length;
+        } else if (fa_mentionner.textarea.selectionStart || fa_mentionner.textarea.selectionStart == 0) {
+          range = fa_mentionner.textarea.selectionStart;
+        }
+ 
+        // set the position of the caret
+        val = val.slice(0, range) + '{FAUX_CARET}' + val.slice(range, val.length);
+ 
+        // parse and sanitize the faux textarea content
+        $(fa_mentionner.faux_textarea).html(
+          val.replace(/</g, '<')
+            .replace(/>/g, '>')
+            .replace(/@"(.*?)"|@(.*?)(?:\s|\r|\n|$)/g, function(M, $1, $2) {
+              var lastChar = M.substr(-1),
+                  name = ($1 || $2 || '').replace(/\{FAUX_CARET\}|"/g, '');
+ 
+              return '<a href="#' + name + '">' + (/\s|\r|\n/.test(M) ? M.slice(0, M.length - 1) + '</a>' + lastChar : M + '</a>');
+            })
+            .replace(/\{FAUX_CARET\}/, '<span id="faux_caret" style="position:absolute;margin-left:-3px;">|</span>')
+        );
+ 
+        faux_caret = document.getElementById('faux_caret');
+ 
+        // mentions are parsed as <a>nchors, so when the faux caret is inside one we'll show some suggestions
+        if (faux_caret && faux_caret.parentNode.tagName == 'A') {
+          fa_mentionner.value = val;
+ 
+          fa_mentionner.delay = window.setTimeout(function() {
+            fa_mentionner.suggest(faux_caret.parentNode.href.replace(/.*?#(.*)/, '$1'), $(faux_caret).offset());
+          }, fa_mentionner.suggest_delay);
+ 
+        }
+ 
+        fa_mentionner.adjustScroll();
+      },
+ 
+ 
+      // search for active mentions in wysiwyg mode
+      searchWYSIWYG : function() {
+        var selected = fa_mentionner.rangeHelper.cloneSelected(),
+            mentions = selected.startContainer.data && selected.startContainer.data.match(/(@".*?")|(@.*?)(?:\s|\r|\n|$)/g),
+            offset,
+            offset_marker,
+            hit,
+            i;
+ 
+            console.log(mentions);
+ 
+        if (mentions && mentions[0]) {
+ 
+          // clean up whitespace
+          for (i in mentions) {
+            mentions[i] = mentions[i].replace(/\s$/g, '');
+          }
+ 
+          // search for the mention that's currently being modified
+          for (i in mentions) {
+            if (!fa_mentionner.wysiwyg_mentions || (mentions[i] != fa_mentionner.wysiwyg_mentions[i])) {
+              hit = true;
+ 
+              fa_mentionner.delay = window.setTimeout(function() {
+                fa_mentionner.rangeHelper.insertMarkers(); // insert markers to help get the caret offset
+ 
+                offset = $(fa_mentionner.frame).offset();
+                offset_marker = $('#sceditor-end-marker', fa_mentionner.body).show().offset();
+ 
+                // add the marker offsets to the iframe offsets
+                offset.left += offset_marker.left;
+                offset.top += offset_marker.top - fa_mentionner.body.scrollTop;
+ 
+                fa_mentionner.suggest(mentions[i].slice(1).replace(/^"|"$/g, ''), offset, true);
+                fa_mentionner.wysiwyg_active = mentions[i]; // save the active mention for later use in finish()
+              }, fa_mentionner.suggest_delay);
+ 
+              break;
+            }
+          }
+ 
+          // hide the suggestion list if there's no newly modified mentions
+          if (!hit) {
+            fa_mentionner.list.style.display = 'none';
+            fa_mentionner.focused = null;
+          }
+ 
+          fa_mentionner.wysiwyg_mentions = mentions; // update the list of mentions
+ 
+        }
+      },
+ 
+      // suggest a list of users based on the passed username
+      suggest : function(username, offset, wysiwyg) {
+ 
+        // insert the suggestion list to show that it's searching
+        fa_mentionner.list.innerHTML = '<span class="fam-info">' + fa_mentionner.lang.placeholder + '</span>';
+        $(fa_mentionner.list).css({
+          left : offset.left + 'px',
+          top : offset.top + 35 + 'px',
+          display : 'block',
+          overflowY : 'auto'
+        });
+ 
+        document.body.appendChild(fa_mentionner.list);
+ 
+        // send a query request to the memeberlist to find users who match the typed username
+        fa_mentionner.request = $.get('/memberlist?username=' + username, function(d) {
+          fa_mentionner.request = null;
+ 
+          var suggestion = $(fa_mentionner.selectors ? fa_mentionner.selectors[0] : '.avatar-mini a', d),
+              ava = fa_mentionner.selectors ? $(fa_mentionner.selectors[1], d) : null,
+              inner = $(fa_mentionner.list).find('.fa_suggestions_inner'),
+              i = 0,
+              j = suggestion.length,
+              s = $('<style type="text/css" name="fa-suggestions-css" />'),
+              name, color, href;
+ 
+          fa_mentionner.list.innerHTML = '';
+ 
+          if (j) {
+            if (!inner[0]) $(fa_mentionner.list).wrapInner('<div class="fa_suggestions_inner" />');
+            
+            for (; i < j; i++) {
+              name = $(suggestion[i]).text().replace(/^\s+|\s+$/g, '');
+              color = $(suggestion[i]).find('span').css('color');
+              href = $(suggestion[i]).attr('href');
+ 
+              fa_mentionner.list.firstChild.insertAdjacentHTML('beforeend',
+                '<a href="javascript:fa_mentionner.finish(\'' + name.replace(/'/g, '\\\'') + '\', ' + wysiwyg + ');" class="fa_mention_suggestion">'+
+                  '<img class="fa_suggested_avatar" src="' + $(fa_mentionner.selectors ? ava[i] : suggestion[i]).find('img').attr('src') + '" style="border-color: ' + color + '" />'+
+                  '<span class="fa_suggested_name" style="color:' + color + '" data-id="' +  href.replace(/.*\/u(\d+)/, '$1') + '">' + name + '</span>'+
+                '</a>'
+              );
+              
+              s.append('.fa_mention_suggestion:hover .fa_suggested_name[data-id="' + href.replace(/.*\/u(\d+)/, '$1') + '"]:after { background-color: ' + color + ' }');
+            }
+            
+            $('head').append(s);
+ 
+            // change overflowY property when it exceeds 7 suggestions -- prevents unsightly scroll bug
+            fa_mentionner.list.firstChild.style.overflowY = j > 7 ? 'scroll' : 'auto';
+            fa_mentionner.list.firstChild.style.paddingRight = j >= 7 ? '5px' : '0';
+ 
+            // update the focused suggestion and scroll it into view
+            fa_mentionner.list.firstChild.firstChild.className += ' fam-focus';
+            fa_mentionner.focused = fa_mentionner.list.firstChild.firstChild;
+            fa_mentionner.scrollSuggestions();
+            fa_mentionner.focusBackgroundChange();
+ 
+          } else {
+            fa_mentionner.list.innerHTML = '<span class="fam-info" style="color:' + fa_mentionner.color.error_font + ';">' + fa_mentionner.lang.not_found + '</span>';
+          }
+ 
+        });
+      },
+ 
+ 
+      // kill the suggestion timeout while typing persists
+      clearSuggestions : function() {
+        if (fa_mentionner.delay) {
+          window.clearTimeout(fa_mentionner.delay);
+          fa_mentionner.delay = null;
+ 
+          fa_mentionner.list.style.display = 'none';
+          fa_mentionner.focused = null;
+        }
+ 
+        if (fa_mentionner.request) {
+          fa_mentionner.request.abort();
+          fa_mentionner.request = null;
+        }
+      },
+ 
+ 
+      // finish the username
+      finish : function(username, wysiwyg) {
+        var mention, index, i;
+ 
+        // hide and clear suggestions
+        fa_mentionner.clearSuggestions();
+        fa_mentionner.focused = null;
+        fa_mentionner.list.style.display = 'none';
+ 
+        if (!wysiwyg) {
+          fa_mentionner.value = fa_mentionner.value.replace(/(?:@".[^"]*?\{FAUX_CARET\}.*?"|@\{FAUX_CARET\}.*?(\s|\n|\r|$)|@.[^"\s]*?\{FAUX_CARET\}.*?(\s|\n|\r|$))/, function(M, $1, $2) {
+            mention = '@"' + username + '"';
+            return '{MENTION_POSITION}' + ( $1 ? $1 : $2 ? $2 : '' );
+          });
+ 
+          // get the index where the mention should be
+          index = fa_mentionner.value.indexOf('{MENTION_POSITION}');
+          fa_mentionner.value = fa_mentionner.value.replace('{MENTION_POSITION}', '');
+ 
+          // save current scroll position for application after the value has been updated
+          fa_mentionner.scrollIndex = fa_mentionner.textarea.scrollTop;
+ 
+          // update the textarea with the completed mention
+          fa_mentionner.instance.val('');
+          fa_mentionner.instance.insert(fa_mentionner.value.slice(0, index) + mention, fa_mentionner.value.slice(index, fa_mentionner.value.length));
+ 
+          // restore the scroll position for the textareas
+          fa_mentionner.textarea.scrollTop = fa_mentionner.scrollIndex;
+          fa_mentionner.adjustScroll();
+ 
+          // update the fake textarea
+          fa_mentionner.updateFauxTextarea();
+ 
+        } else {
+          // save the caret range in WYSIWYG so we can restore it after replacing the HTML
+          fa_mentionner.rangeHelper.saveRange();
+          fa_mentionner.body.innerHTML = fa_mentionner.body.innerHTML.replace(new RegExp(fa_mentionner.wysiwyg_active.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + '(<span.*?id="sceditor-end-marker".*?>)'), '@"' + username + '"$1');
+          fa_mentionner.body.focus();
+          fa_mentionner.rangeHelper.restoreRange();
+ 
+          // update the wysiwyg mention array so no new suggestions appear
+          for (i in fa_mentionner.wysiwyg_mentions) {
+            if (fa_mentionner.wysiwyg_mentions[i] == fa_mentionner.wysiwyg_active) {
+              fa_mentionner.wysiwyg_mentions[i] = '@"' + username + '"';
+              break;
+            }
+          }
+        }
+      },
+ 
+ 
+      // scroll the selected suggestion into view
+      scrollSuggestions : function() {
+        $(fa_mentionner.list).scrollTop(
+          (
+            $(fa_mentionner.focused).offset().top -
+            $(fa_mentionner.list).offset().top +
+            $(fa_mentionner.list).scrollTop()
+          ) -
+ 
+          (26 * 3) // 26 = the height of the suggestions, so display 3 suggestions above while scrolling
+        );
+      },
+        
+      focusBackgroundChange : function() {
+        $('.fa_mention_suggestion').each(function() {
+          if (/fam-focus/.test(this.className) && !$(this).attr('style')) {
+            $(this).css('background-color', function() {
+              return $(this).find('.fa_suggested_name')[0].style.color.replace('rgb', 'rgba').replace(/\)$/, ', 0.5)');
+            });
+          } else {
+            $(this).removeAttr('style');
+          }
+        });
+      }
+    };
+ 
+    // get computed styles for the textarea and apply them to the faux textarea
+    for (var css = window.getComputedStyle(fa_mentionner.textarea, null), i = 0, j = css.length, str = ''; i < j; i++) {
+      str += css[i] + ':'  + css.getPropertyValue(css[i]) + ';';
+    }
+ 
+    // add styles to the head
+    $('head').append('<style type="text/css">'+
+      '#faux_text_editor {' + str + '}'+
+      '#faux_text_editor { position:absolute; left:0; bottom:0; z-index:-1; visibility:hidden; display:block; overflow-y:auto; }'+
+      '#fa_mention_suggestions { color:' + fa_mentionner.color.font + '; font-size:10px; background:' + fa_mentionner.color.background + '; border:1px solid ' + fa_mentionner.color.border + '; z-index:999; max-height:182px; overflow-x:hidden; box-shadow:0 6px 12px ' + fa_mentionner.color.shadow + '; }'+
+      'a.fa_mention_suggestion, .fam-info { color:' + fa_mentionner.color.font + '; height:26px; line-height:26px; padding:0 3px; display:block; white-space:nowrap; cursor:pointer; position: relative; }'+
+      'a.fa_mention_suggestion.fam-focus { color:' + fa_mentionner.color.hover_font + '; background:' + fa_mentionner.color.hover_background + '; }'+
+      '.fa_suggested_avatar { height:20px; width:20px; vertical-align:middle; margin-right:3px; margin-bottom:3px; border:1px solid; }'+
+      '.fa_suggested_name { font-weight: bold; }'+
+      '.fa_suggested_name:after { position: absolute; content: ""; width: 1px; height: 100%; right: 0; top: 0; transition: 0.25s; }'+
+      '.fa_mention_suggestion:hover .fa_suggested_name:after { width: 5px; }'+
+      '.fa_mention_suggestion:hover .fa_suggested_name { color: #FFF !important; }'+
+      '#fa_mention_suggestions { overflow: auto; padding: 0; min-height: 182px; min-width: 150px; }'+
+      '.fa_suggestions_inner { position: absolute; top: 5px; left: 5px; bottom: 5px; right: 5px; overflow-y: scroll; overflow-x: hidden; }'+
+      '.fa_suggestions_inner::-webkit-scrollbar { width: 4px; } .fa_suggestions_inner::-webkit-scrollbar-track { background-color: rgba(255, 255, 255, 0.1); border-radius: 10px; } .fa_suggestions_inner::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.3); border-radius: 10px; }'+
+      ''+
+    '</style>');
+ 
+    // insert faux textarea into document
+    fa_mentionner.textarea.parentNode.insertBefore(fa_mentionner.faux_textarea, fa_mentionner.textarea);
+ 
+    // apply event handlers
+    fa_mentionner.textarea.onclick = fa_mentionner.updateFauxTextarea;
+    fa_mentionner.textarea.onscroll = fa_mentionner.adjustScroll;
+  
+    fa_mentionner.body.onscroll = fa_mentionner.focusBackgroundChange;
+ 
+    // update the faux textarea on keyup
+    fa_mentionner.instance.keyUp(function(e) {
+      if (fa_mentionner.focused && e && (e.keyCode == 13 || e.keyCode == 38 || e.keyCode == 40)) {
+        fa_mentionner.updateFauxTextarea(true, e.keyCode);
+        return false;
+      } else {
+        fa_mentionner.updateFauxTextarea(false, e.keyCode);
+      }
+    });
+ 
+    // key events for the suggested mentions
+    $([document, fa_mentionner.body]).on('keydown', function(e) {
+      var that = e.target;
+ 
+      if (fa_mentionner.focused && e && e.keyCode && (that.tagName == 'TEXTAREA' || that.tagName == 'BODY')) {
+ 
+        // move selection down
+        if (e.keyCode == 40) {
+          var next = fa_mentionner.focused.nextSibling;
+ 
+          if (next) {
+            $(fa_mentionner.focused).removeClass('fam-focus');
+            next.className += ' fam-focus';
+            fa_mentionner.focused = next;
+ 
+            fa_mentionner.focusBackgroundChange();
+            fa_mentionner.scrollSuggestions();
+          }
+ 
+          return false;
+        }
+ 
+        // move selection up
+        if (e.keyCode == 38) {
+          var prev = fa_mentionner.focused.previousSibling;
+ 
+          if (prev) {
+            $(fa_mentionner.focused).removeClass('fam-focus');
+            prev.className += ' fam-focus';
+            fa_mentionner.focused = prev;
+ 
+            fa_mentionner.focusBackgroundChange();
+            fa_mentionner.scrollSuggestions();
+          }
+ 
+          return false;
+        }
+ 
+        // apply selection
+        if (e.keyCode == 13) {
+          fa_mentionner.focused.click();
+          return false;
+        }
+ 
+      }
+    });
+ 
+    // update focused suggestion on hover
+    $(document).on('mouseover', function(e) {
+      var that = e.target;
+ 
+      if (/fa_mention_suggestion/.test(that.className) && !/fam-focus/.test(that.className)) {
+        $(fa_mentionner.focused).removeClass('fam-focus');
+        that.className += ' fam-focus';
+        fa_mentionner.focused = that;
+        
+        fa_mentionner.focusBackgroundChange();
+      }
+    });
+  }
+})});
+
+/* 29 - Emoticon Search */
+$(function() {
+  'DEVELOPED BY ANGE TUTEUR';
+  'NO DISTRIBUTION WITHOUT CONSENT OF THE AUTHOR';
+  'ORIGIN : http://fmdesign.forumotion.com/';
+ 
+  // load handler for iframes
+  function fa_emoji_search () {
+    var search = $('<input/>').attr({
+      placeholder : 'Search...',
+      class : 'fa_emoji_search inputbox',
+      name : 'emoji_search',
+      type : 'text'
+    }).keyup(function() {
+      var emoji = $(this).closest('body').find('img'),
+          val = this.value.toLowerCase(),
+          i = 0,
+          j = emoji.length;
+      // loop through each emoji to see if any match the input
+      for (; i < j; i++) {
+        if (val) {
+          if (emoji[i].title.toLowerCase().indexOf(val) != -1 || emoji[i].alt.toLowerCase().indexOf(val) != -1) {
+            emoji[i].style.display = '';
+          } else if (emoji[i].style.display != 'none') {
+            emoji[i].style.display = 'none';
+          }
+        } else {
+          emoji[i].style.display = '';
+        }
+      }
+    })[0],
+        
+    style = $('<style type="text/css">.fa_emoji_search { width: 90% !important; margin: 6px 0 !important; border-radius: 0 !important; padding: 4px !important; } .fa_emoji_search:focus:not(:hover) { border-color: #80A5C2; background-color: #131313; } input.fa_emoji_search:focus:not(:hover):placeholder-shown { border-color: #FFF; } .smiley-element, .row1 { font-size:0; } .smiley-element img, .row1 img { margin:3px; } #sceditor_smilies #smilies_header { height:auto; } form[name="smilies_categ"] { text-align:center; } #sceditor_smilies { background: #000; overflow: auto; } #sce_smilies_body { position: absolute; top: 5px; left: 5px; bottom: 5px; right: 5px; padding: 5px; overflow-y: scroll; overflow-x: hidden; } #sce_smilies_body::-webkit-scrollbar { width: 4px; } #sce_smilies_body::-webkit-scrollbar-track { background-color: rgba(255, 255, 255, 0.1); border-radius: 10px; } #sce_smilies_body::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.3); border-radius: 10px; } /* WebKit, Blink, Edge */ ::-webkit-input-placeholder { color: #FFF; } :hover::-webkit-input-placeholder { color: #666; text-shadow: 0 0 0.1em #666, 0 0 0.1em #666, 0 0 0.1em #666; } /* Mozilla Firefox 4 to 18 */ :-moz-placeholder { color: #FFF; opacity: 1; } :hover:-moz-placeholder { color: #666; text-shadow: 0 0 0.1em #666, 0 0 0.1em #666, 0 0 0.1em #666; } /* Mozilla Firefox 19+ */ ::-moz-placeholder { color: #FFF; opacity: 1; } :hover::-moz-placeholder { color: #666; text-shadow: 0 0 0.1em #666, 0 0 0.1em #666, 0 0 0.1em #666; } /* Internet Explorer 10-11 */ :-ms-input-placeholder { color: #FFF; } :hover:-ms-input-placeholder { color: #666; text-shadow: 0 0 0.1em #666, 0 0 0.1em #666, 0 0 0.1em #666; } /* Microsoft Edge */ ::-ms-input-placeholder { color: #FFF; } :hover::-ms-input-placeholder { color: #666; text-shadow: 0 0 0.1em #666, 0 0 0.1em #666, 0 0 0.1em #666; }</style>')[0],
+    frag = document.createDocumentFragment(),
+    body = $(this).contents().find('body')[0];
+ 
+    if (body) {
+      frag.appendChild(style);
+      frag.appendChild(search);
+      body.querySelector('form[name="smilies_categ"]').appendChild(frag);
+    }
+  };
+ 
+  // add load handlers for each iframe
+  $(function() {
+    var button = $('.sceditor-button-emoticon')[0];
+ 
+    if (button) {
+      button.onclick = function() {
+        document.getElementById('quickEmojInternal').onload = fa_emoji_search;
+        this.onclick = null;
+      };
+    }
+ 
+    $('iframe[src^="/smilies"]').load(fa_emoji_search).css({
+      'border-radius': '5px',
+      'box-shadow': '0 0 10px 3px #000'
+    });
+  });
+});
+
+/* 30 - Change Points Value via Profile */
+/\/u\d+$/.test(location.href) && $(function() {
+  if (_userdata.user_level != 1) return;
+  
+  var target = '#field_id-13 .field_uneditable',
+      // 'h1.page-title > span',
+      
+      admin = $('a[href^="/admin/index.forum"]'),
+      session_id = admin[0].href.replace(/.*\&tid=(.*)/, '$1'),
+      user_id = location.href.replace(/.*\/u(\d+).*/, '$1'),
+      points_link = '/admin/index.forum?part=modules&sub=point&mode=don&extended_admin=1',
+      html = '<div class="edit-points-container"><span class="selected">Add</span><label><input type="checkbox" id="subtract-points"><div class="toggle"></div></label><span>Subtract</span><div class="point-change positive" data-points="50">50</div><div class="point-change positive" data-points="100">100</div><span>Points</span></div>';
+  
+  $(target).after(html);
+  
+  $(function() {
+    $('#subtract-points').change(function() {
+      $(this).parent('label').siblings().removeClass('selected positive negative');
+      $(this).parent('label')[this.checked ? 'next' : 'prev']().addClass('selected');
+      $(this).parent('label').siblings('div').addClass(this.checked ? 'negative' : 'positive');
+    });
+
+    $('.point-change').click(function() {      
+      var add = /positive/i.test(this.className),
+          amount = Number((add ? '' : '-') + this.innerHTML),
+          current_point_count = Number($('#field_id-13 .field_uneditable').html()),
+          new_point_count = amount + current_point_count,
+          point_data = {};
+      
+      point_data['action'] = 'add_points_for_user';
+      point_data['points_new_value[' + user_id + ']'] = new_point_count,
+            
+      $.ajax({
+          url: points_link + '&tid=' + session_id,
+          type: 'post',
+          data: point_data,
+          success: function() {
+            $('#field_id-13 .field_uneditable').html(new_point_count).addClass('points-complete');
+            $('.edit-points-container').addClass('points-complete');
+            
+            if (!add) $('.points-complete').addClass('negative');
+            
+            setTimeout(function() {
+              $('.points-complete').removeClass('points-complete negative');
+            }, 3000);
+          }
+      });
+    });
+  });
+  
+  if (!$('[name="points-css"]')[0]) {
+    $('head').append('<style type="text/css" name="points-css">.edit-points-container{display:inline-block;position:relative;margin:0 15px;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.edit-points-container *{vertical-align:middle}.edit-points-container>*{margin:0 5px}.edit-points-container span{color:#AAA;font-size:.5em;transition:.2s}.edit-points-container span.selected{color:red}.edit-points-container span.selected:first-child{color:#0F0}.edit-points-container label{height:auto;display:inline-block;padding:0;margin:0;vertical-align:initial;cursor:pointer}.edit-points-container label input{display:none}.edit-points-container label .toggle{position:relative;display:inline-block;width:32px}.edit-points-container label .toggle:after,.edit-points-container label .toggle:before{position:absolute;content:"";top:50%;left:0;transform:translateY(-50%);border-radius:50px}.edit-points-container label .toggle:before{height:16px;width:16px;background-color:#eee;color:#0F0;box-shadow:inset 0 0 .3em,0 0 1em .1em,0 0 2em .2em;transition:.2s;z-index:1}.edit-points-container label .toggle:after{height:4px;width:32px;background-color:#666;z-index:0}.edit-points-container label:hover .toggle:before{background-color:rgba(255,255,255,.6)}.edit-points-container label:active input+.toggle:before{width:20px;background-color:transparent}.edit-points-container label:active input:checked+.toggle:before{left:calc(100% - 21px)}.edit-points-container label input:checked+.toggle:before{color:red;left:calc(100% - 16px)}.edit-points-container div{display:inline-block}.edit-points-container .point-change{position:relative;overflow:hidden;border:1px solid;color:#AAA;background-color:#111;box-shadow:0 0 2em 1px;font-size:.5em;padding:3px 5px;cursor:pointer}.edit-points-container .point-change:after{position:absolute;top:-1px;right:0;opacity:0;font-family:FontAwesome;font-size:.75em;transition:opacity .5s}.edit-points-container .point-change:hover{box-shadow:0 0 .1em 1px}.edit-points-container .point-change:hover:after{opacity:.4}.edit-points-container .point-change.positive:after{content:"\\f0fe"}.edit-points-container .point-change.positive:hover{color:#0F0;background-color:#020}.edit-points-container .point-change.negative:after{content:"\\f146"}.edit-points-container .point-change.negative:hover{color:red;background-color:#200}.edit-points-container:after{font-family:FontAwesome;content:"\\f00c";display:inline-block;transform:scaleY(0);color:#AAA;font-size:.7em;transition:1s ease-in-out}.edit-points-container.points-complete:after{transform:scaleY(1);color:#0F0}.edit-points-container.points-complete.negative:after{color:#F00}.field_uneditable{color:inherit;text-shadow:0 0 0 transparent}.field_uneditable.points-complete{color:#0F0;text-shadow:0 0 1em #000,0 0 1em #000,0 0 1em #000}.field_uneditable.points-complete.negative{color:#F00}#field_id-13 .field_uneditable{display:inline-block;vertical-align:middle}#field_id-13 .edit-points-container{border-left:1px solid;padding-left:10px}#field_id-13 .edit-points-container *,#field_id-13 .edit-points-container:after{font-size:1em;line-height:normal}</style>');
+  }
+});
+
+/* 31 - Extra Register on Login Page Removal/Login Focus */
+$(function() {
+  if (/\/login/.test(location.href) && document.getElementsByClassName('panel')[1]) $('.panel').eq(1).remove();
+
+  var pseudo = $('input[name="username"]')[0];
+  pseudo && pseudo.focus();
+});
+
+/* 32 - "You are logged in as" points value */
+$(function() {
+  var node = document.getElementById('pointsValue'),
+      storage = window.localStorage,
+      cache = 60, // time in minutes
+      o;
+
+  if (node && storage) {
+    o = storage.user_points ? JSON.parse(storage.user_points) : {};
+    
+    if (!storage.user_points || storage.user_points.exp < new Date().getTime() - cache * 60 * 1000) {
+      $.ajax({
+        url: '/u' + _userdata.user_id,
+        type: 'get',
+        async: false,
+        success: function(d) {
+          var points = $('#field_id-13', d)[0];
+          
+          points = points ? points.lastChild.firstChild.innerHTML : 'N/A';
+          
+          o = {
+            value: points,
+            exp: new Date().getTime()
+          };
+          
+          storage.user_points = JSON.stringify(o);
+        }
+      });
+    }
+    
+    node.innerHTML = o.value;
+  }
+});
+
+/* 33 - Random Styles [not used] */
+$(function() {
+  return; // Remove this line
+  var users = {
+      '17': ['style_1', 'style_2', 'style_3'],
+      }, a = document.getElementsByTagName('A'), i = 0, j = a.length, k;
+
+  for (; i < j; i++) {
+    for (k in users) {
+      if ($(a[i]).attr('href') == '/u' + k) {
+        a[i].className += ' ' + users[k][Math.floor(Math.random() * users[k].length)]
+      }
+    }
+  }
+  
+  $('head').append(
+    '<style type="text/css" name="random-styles">' +
+      '.style_1 {}' +
+      '.style_2 {}' +
+      '.style_3 {}' +
+    '</style>'
+  );
+});
