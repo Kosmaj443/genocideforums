@@ -1,0 +1,134 @@
+// Homepage
+/^\/$/.test(location.pathname) && $(function() {
+  if (!localStorage || !localStorage.vote_counts) return;
+  var votes = JSON.parse(localStorage.vote_counts), v, a;
+  
+  for (v in votes) {
+    a = $('a[href*="/t' + v + '-"]')[0].innerHTML;
+    if (!/\.\.\.$/.test(a)) continue;
+    
+    a.innerHTML = a.innerHTML.replace(votes[topic_id].title, votes[topic_id].title + " (" + votes[topic_id].count + ")");
+  }
+});
+
+// Subforums
+/\/f3/.test(location.href) && $(function() {
+  // function to get the vote counts && store in localstorage
+    var cache_time = 15, // time in minutes
+        storage = window.localStorage,
+        vote_count = 0,
+        $votingPhases = $('.forumbg').last().find('a.topictitle').filter(function() { return /\[voting\sphase\]/i.test(this.innerHTML) }),
+        topic_id, topic_title, a, v;
+    
+    if (!storage) return;
+    v = storage.vote_counts ? JSON.parse(storage.vote_counts) : {};
+    
+    $votingPhases.each(function() {
+      a = this.href;
+      topic_id = a.replace(/.*\/t(\d+)-.*/, '$1');
+      topic_title = this.innerHTML;
+      
+      if (!v[topic_id] || v[topic_id].exp <= new Date().getTime() - 60 * 1000 * cache_time) {
+        $.ajax({
+          url: a,
+          type: 'get',
+          async: false,
+          success: function(d) {
+            var next_page = $('.pagination strong ~ .pag-img', d)[0],
+                check, p;
+            
+            $('.post .content.clearfix font[color]', d).slice(1).filter(function() { return /\+|\-/.test(this.innerHTML.charAt(0)) }).each(function() {
+              vote_count += parseInt(this.innerHTML);
+console.log(this.parentNode.innerHTML);
+            });
+            
+            check = function(next, page) {
+              if (!next) return;
+
+              $.ajax({
+                url: next.href,
+                type: 'get',
+                async: false,
+                success: function(page) {
+                  $('.post .content.clearfix font[color]', page).slice(1).filter(function() { return /\+|\-/.test(this.innerHTML.charAt(0)) }).each(function() {
+                    vote_count += parseInt(this.innerHTML);
+console.log(this.parentNode.innerHTML);
+                  });
+
+                  next_page = $('.pagination strong ~ .pag-img', page)[0];
+                  next_page && check(next_page, page);
+                }
+              });
+            };
+            
+            next_page && check(next_page, p);
+          }
+        });
+      
+        v[topic_id] = {
+          title: topic_title,
+          count: vote_count,
+          exp: new Date().getTime()
+        };
+        
+        storage.vote_counts = JSON.stringify(v);
+      }
+      
+      this.innerHTML = this.innerHTML.replace(/(.*\[voting\sphase\]).*/i, function(_, a) {
+        return a + ' (' + v[topic_id].count + ')';
+      });
+      
+      console.log('voting topics updated.');
+    });
+});
+
+// Topics
+/\/t\d+/.test(location.href) && $(function() {
+  var applications = 3;
+  
+  if (!url_egosearch || url_egosearch.split('where=').pop() != 'f' + applications) return;
+  var $topicTitles = $('h2.topic-title > a'),
+      topic_id = location.href.replace(/.*\/t(\d+).*/, '$1'),
+      votes;
+  
+    $topicTitles.each(function() {
+      if (!localStorage || !localStorage.vote_counts) return false;
+      votes = JSON.parse(localStorage.vote_counts);
+      this.innerHTML = this.innerHTML.replace(votes[topic_id].title, votes[topic_id].title + " (" + votes[topic_id].count + ")");
+    });
+  
+  if (!_lang || !/\smember|tactician/i.test(_lang.rank_title)) return;
+  
+  $(function() {
+    if (!$.sceditor || !url_egosearch || !/f3$/.test(url_egosearch)) return;
+
+    var title_link = $('h1.page-title > a')[0].href,
+        voting_phase = /\[voting\sphase\]/i.test($topicTitles[0].innerHTML),
+        vote_count = /unofficial/i.test(_lang.rank_title) ? 0.5 : 1,
+        instance = $('#text_editor_textarea').sceditor('instance');
+    
+    if (!voting_phase) return;
+
+    $('#voting-options > a').each(function() {
+      this.href = '#';
+      this.innerHTML = /negative/i.test(this.className) ? (0 - vote_count) : '+' + vote_count;
+
+      $(this).click(function(e) {
+        if (!$(this).is('.my-vote')) {
+          $(this).addClass('my-vote');
+          $(this).siblings().removeClass('my-vote');
+        } else {
+          $(this).removeClass('my-vote');
+        }
+        e.preventDefault();
+      });
+    });
+    
+    $('#quick_reply').submit(function(event) {
+      var v = $('.my-vote')[0];
+      instance.insert(' [color=#' + v.dataset.color + ']' + v.innerHTML + '[/color]');
+    });
+    
+    console.log('Voting options are complete.');
+  });
+});
