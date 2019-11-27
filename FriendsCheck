@@ -1,0 +1,97 @@
+window.fa_fafs = {
+  url: '/profile?mode=editprofile&page_profil=friendsfoes',
+  cacheTime: 1, // time in hours to store data
+  storage: localStorage,
+
+  storeFriends: function() {
+    var friends_foes = {
+          friends: [],
+          req_s: [],
+          req_r: [],
+          foes: []
+        };
+
+    if (fa_fafs.storage.friends_and_foes && fa_fafs.storage.friends_and_foes.exp > new Date().getTime() - fa_fafs.cacheTime * 60 * 60 * 1000) return;
+
+    $.ajax({
+      url: fa_fafs.url,
+      type: 'get',
+      async: false,
+      success: function(d) {
+        var add_to_list = function(eq, arr) {
+          $('#cp-main .panel', d).eq(eq).find('.friends-foes-list a:first-child').each(function() {
+            arr.push(this.href.replace(/.*\/u(\d+)/, '$1'))
+          });
+        };
+
+        add_to_list(0, friends_foes.friends);
+        add_to_list(1, friends_foes.req_s);
+        add_to_list(2, friends_foes.req_r);
+        add_to_list(3, friends_foes.foes);
+
+
+        fa_fafs.storage.friends_and_foes = JSON.stringify({
+          friends_foes: friends_foes,
+          exp: new Date().getTime()
+        })
+      }
+    });
+  },
+
+  checkFriend: function(id) {
+    if (!fa_fafs.storage.friends_and_foes) fa_fafs.storeFriends();
+
+    var friends_foes = JSON.parse(fa_fafs.storage.friends_and_foes).friends_foes,
+        f, i;
+
+    for (f in friends_foes) {
+      for (i = 0; i < friends_foes[f].length; i++) {
+        if (friends_foes[f][i] == id) return f;
+      }
+    }
+
+    return false;
+  }
+};
+
+$(function() {
+  fa_fafs.storeFriends();
+  
+  /\/u\d+/.test(location.href) && (function() {
+    var id = location.href.match(/.*\/u(\d+)/)[1],
+        status = fa_fafs.checkFriend(id),
+        add_url = fa_fafs.url + '',
+        deny_url = fa_fafs.url + '&deny=' + id,
+        remove_url = fa_fafs.url + '&remove=' + id,
+        lang = {
+          friends: null,
+          req_s: 'Cancel friend request',
+          req_r: ['Accept friend request', 'Deny friend request'],
+          foes: 'Remove from my foes list',
+        };
+    
+    console.log(lang[status]);
+    
+    if (!status || status == 'friends') return;
+    
+    
+    // request sent
+    if (status == 'req_s') {
+      $('#profile-advanced-add').html('<a href="' + remove_url + '" class="mainmenu">' + lang.req_s + '</a>');
+    }
+    
+    // request received
+    if (status == 'req_r') {
+      $('#profile-advanced-add').addClass(status);
+      $('#profile-advanced-add > *').first().addClass('accept-request').html('<span class="icon-add"></span>' + lang.req_r[0]);
+      $('#profile-advanced-add > *').last()[0].outerHTML = '<a href="' + deny_url + '" class="mainmenu deny-request">' + lang.req_r[1] + '</a>';
+      
+      $('head').append('<style type="text/css" name="friend-request">.accept-request:before{content:""!important;margin:0!important}.accept-request .icon-add{position:relative;margin-right:10px;transition:0s}.accept-request .icon-add:after,.accept-request .icon-add:before{font-family:FontAwesome;font-weight:400!important;text-shadow:0 0 1px #000,0 0 1px #000,0 0 1px #000,0 0 1px #000,0 0 1px #000,0 0 1px #000}.accept-request .icon-add:before{font-size:1.2em;content:"\\f007"}.accept-request .icon-add:after{position:absolute;font-size:.75em;bottom:0;right:-5px;content:"\\f00c"}.accept-request:hover .icon-add,.accept-request:hover .icon-add:after,.accept-request:hover .icon-add:before{color:inherit;text-shadow:inherit}#profile-advanced-add .deny-request[href^="/profile?mode"]{color:#F66}#profile-advanced-add .deny-request[href^="/profile?mode"]:hover{text-shadow:0 0 1em #F66, 0 0 1em #F66, 0 0 1em #F66}#profile-advanced-add .deny-request[href^="/profile?mode"]:hover:after{background-color:#F66}@keyframes new-request{0%{box-shadow:0 0 3px 1px}100%{box-shadow:0 0 3em 1px}}#profile-advanced-add.req_r{color:#FFF;animation:new-request .8s ease-in-out infinite alternate}</style>');
+    }
+    
+    // foe
+    if (status == 'foes') {
+      $('#profile-advanced-add').html('<a href="' + remove_url + '" class="mainmenu">' + lang.foes + '</a>');
+    }
+  })();
+});
