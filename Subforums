@@ -1,0 +1,423 @@
+// Table of Contents
+
+/*
+ * 01 - Classes in Applications/Resignations Section
+ * 02 - Actions of Moderation
+ * 03 - Attention GeNociDe in Applications section
+ * 
+ * 
+ * 
+ * 
+ * 
+*/
+
+/* 01 - Classes in Applications Section */
+/\/f(?:3|23|24|25|26)[p]?\d*-/.test(location.href) && $(function() {
+  // Applications
+  $('li.row').each(function() {
+    var r = $(this).find('.dterm')[0].style.backgroundImage.replace(/.*result=(.*)"\)/, '$1');
+    if (r == '') return;
+    
+    $(this).addClass('application ' + r);
+    $(this).find('.topictitle').append(' <span>[' + r.charAt(0).toUpperCase() + r.slice(1) + ']</span>');
+  });
+});
+
+/\/f5[p]?\d*-/.test(location.href) && $(function() {
+  // Resignations
+  $('a.topictitle').filter(function() { return /\[cancelled\]/i.test(this.innerHTML) }).addClass('cancelled');
+    
+  setTimeout(function() {
+    $('head').append('<style type="text/css" name="resignations">a.topictitle.cancelled { color: #333; } a.topictitle.cancelled:hover { text-shadow: 0 0 0.1em #333, 0 0 0.1em #333, 0 0 0.1em #333; }</style>');
+  }, 200);
+});
+
+/\/f29[p]?\d*-/.test(location.href) && $(function() {
+  // Court
+  $('a.topictitle').filter(function() { return /.*\[(?:accepted|denied|voided)\]/i.test(this.innerHTML) }).each(function() {
+    this.className += ' closed ';
+    this.className += /accepted/i.test(this.innerHTML) ? 'accepted' : /denied/i.test(this.innerHTML) ? 'denied' : /voided/i.test(this.innerHTML) ? 'voided' : '';
+  });
+  
+  $('a.topictitle.closed').closest('div').siblings('img').remove();
+  
+  $('head').append('<style type="text/css">a.topictitle.accepted{color:#6F6}a.topictitle.denied{color:#F66}a.topictitle.voided{color:#666}a.topictitle.closed:hover{text-shadow:0 0 0.1em, 0 0 0.1em, 0 0 0.1em}a.topictitle.closed:before{content:\'\';font-family:FontAwesome;margin:0 5px 0 0}a.topictitle.closed.accepted:before{content:\'\\f058\'}a.topictitle.closed.denied:before{content:\'\\f057\'}a.topictitle.closed.voided:before{content:\'\\f059\'}</style>');
+});
+
+/\/f34[p]?\d*-/.test(location.href) && $(function() {
+  // Veteran/Unofficial Member Polls
+  $('dl.icon').each(function() {
+    if (!/lock\.png/.test(this.style.backgroundImage)) return;
+    var t = $(this).find('.topictitle');
+    
+    switch (true) {
+      case /\[official\smember\]/i.test(t[0].innerHTML): t.addClass('member'); break;
+      case /\[unofficial\smember\]/i.test(t[0].innerHTML): t.addClass('unofficial'); break;
+      case /veteran/i.test(t[0].innerHTML): t.addClass('veteran'); break;
+      default: t.addClass('nonmember'); t.append(' [Non-Member]');
+    }
+  });
+  
+  $('head').append('<style type="text/css">a.topictitle.member{color:#0CF}a.topictitle.unofficial{color:#ACF}a.topictitle.veteran{color:#070}a.topictitle.nonmember{color:#999}a[class^="topictitle "]:hover{text-shadow:0 0 0.1em,0 0 0.1em,0 0 0.1em}</style>');
+});
+
+/* 02 - Actions of Moderation */ 
+  
+/***
+ * Application: Actions of moderation.
+ * Description: This application shows a shortcut menu for the moderation in the list of topics.
+ * Version: 1.03182014-jq1.9.1 - (Dodekatheon / 2) + (Hermes = Zeus + Maia)
+ * Made and Optimizations by JScript - 2014/03/18
+ * View more in: http://ajuda.forumeiros.com
+ * Copyright (c) 2013 JScript <jscriptbrasil at live dot com>
+ * This work is free. You can redistribute it and/or modify it
+ * under the terms of the WTFPL, Version 2
+ */
+/***
+* System Defined Variables - Do not edit if you don't know!
+***/
+var oMTConfig = {
+    sEase: 800,
+    sErrorMsg: '',
+    oTopicTitle: {},
+    sTopicHref: '',
+    iTopicID: 0,
+    sTopicTitle: '',
+    sContent:
+        '<a title="Actions of Moderation" class="ipsModMenu" href="#"></a>',
+    sMenu:
+        '<ul style="display: none; position: absolute; z-index: 9999;" class="ipbmenu_content" id="topic_mod_menucontent">' +
+            '<li style="z-index: 10000;"><a title="Rename Topic" href="" id="t_rename" onclick="_rename_Topic();return false;" style="z-index: 10000;">Rename Topic</a></li>' +
+            //'<li style="z-index: 10000;"><a title="Delete Topic" href="" id="t_pin" style="z-index: 10000;">Delete Topic</a></li>' +
+            //'<li style="z-index: 10000;"><a title="Change Icon" href="" id="t_icon" style="z-index: 10000;">Change Icon</a></li>' +
+            '<li style="z-index: 10000;"><a title="Lock Topic" href="" id="t_lock" style="z-index: 10000;">Lock Topic</a></li>' +
+            '<li style="z-index: 10000;"><a title="Move Topic" href="" id="t_move" style="z-index: 10000;">Move Topic</a></li>' +
+            '<li style="z-index: 10000;"><a title="Send to Trash" href="" id="t_hide" style="z-index: 10000;">Recycle (Trash)</a></li>' +
+            '<li style="z-index: 10000;"><a title="Delete Topic" href="" id="t_delete" style="z-index: 10000;">Delete Topic</a></li>' +
+        '</ul>',
+    sCSS:
+        '<style>' +
+        /*'#rename-topic {' +
+            'display: block;' +
+        '}' +*/
+        '.statused tr:hover > .tcr .ipsModMenu, ' +
+            '.forumline tr td:hover > .postdetails .ipsModMenu, ' +
+            'ul.topiclist.topics.bg_none dl.icon:hover > .lastpost .ipsModMenu, '+
+            'table.ipbtable tbody tr:hover > td.row1.lastaction .ipsModMenu, ' +
+  '.forum-category .forum-block:hover .ipsModMenu, a.ipsModMenu:focus {' +
+               // 'opacity: 1;' +
+               'color: #666;' +
+               'text-shadow: 0 0 1em #000, 0 0 1em #000, 0 0 1em #000;' +
+        '}' +
+        'a.ipsModMenu {' +
+  	    'display: inline-block;' +
+  	    'position: absolute;' +
+            'height: 15px;' +
+            'margin: 0 8px;' +
+  	    'text-align: center;' +
+            'vertical-align: middle;' +
+            'top: 50%;' +
+            'right: 0;' +
+            'transform: translateY(-50%);' +
+            'width: 15px;' +
+            'color: transparent;' +
+            'text-shadow: 0 0 0 transparent;' +
+  	    // 'color: #666;' +
+        '}' +
+  	'.ipsModMenu:after {' +
+  	    'font-family: FontAwesome;' +
+  	    'font-size: 14px;' +
+  	    'content: "\\f013";' +
+            // 'opacity: 0;' +
+        '}' +
+  	'a.ipsModMenu:hover {' +
+  	    'color: #FFF !important;' +
+  	    'text-shadow: 0 0 0.1em #FFF, 0 0 0.1em #FFF, 0 0 0.1em #FFF !important;' +
+	'}' +
+        '.ipbmenu_content {' +
+            'padding: 0;' +
+            'font-size: 12px;' +
+            'min-width: 85px;' +
+            'z-index: 2000;' +
+        '}' +
+        '.ipbmenu_content {' +
+  	    'background-color: #262626;' +
+            'border: 1px solid #CCC;' +
+            'box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3);' +
+        '}' +
+  	'.ipbmenu_content li:not(:last-child) {' +
+            'border-bottom: 1px solid #CCC;' +
+        '}' +
+        '.ipbmenu_content li {' +
+            // 'list-style-type: none !important;' +
+        '}' +
+        '.ipbmenu_content a {' +
+            'display: block;' +
+            'padding: 6px 10px;' +
+            'text-align: left;' +
+            'text-decoration: none;' +
+        '}' +
+        '.ipbmenu_content a:hover {' +
+  	    'box-shadow: inset 0 0 5px #FFF, 0 0 10px #FFF;' +
+        '}' +
+        '.cancel {' +
+            // 'color: #AD2930;' +
+            'font-size: 0.8em;' +
+            'font-weight: bold;' +
+        '}' +
+        '.input_text {' +
+            'border-color: #848484 #C1C1C1 #E1E1E1 !important;' +
+            'border-radius: 2px 2px 2px 2px !important;' +
+            'border-style: solid !important;' +
+            'border-width: 1px !important;' +
+            'padding: 4px !important;' +
+            'font-size: 13px !important;' +
+        '}' +
+        '#rename-topic .button2 {' +
+            /*'border-color: #212121;' +
+            'border-radius: 3px 3px 3px 3px;' +
+            'box-shadow: 0 1px 0 0 #5C5C5C inset, 0 2px 3px rgba(0, 0, 0, 0.2);' +
+            'border-style: solid;' +
+            'border-width: 1px;' +*/
+            'cursor: pointer;' +
+            'padding: 4px 10px !important;' +
+            'min-width: 0 !important;' +
+            'font-size: 13px !important;' +
+        '}' +
+        '.input_text:focus {' +
+            'box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);' +
+        '}' +
+        '[id^="ipsGlobalNotification"] {' +
+            'display: none;' +
+            'font-weight: bold;' +
+            'left: 50%;' +
+            'margin-left: -250px;' +
+            'position: fixed;' +
+            'text-align: center;' +
+            'top: 3em;' +
+            'z-index: 10000;' +
+        '}' +
+        '.popupWrapper {' +
+            'background-color: rgba(70, 70, 70, 0.6);' +
+            'border-radius: 4px 4px 4px 4px;' +
+            'box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7);' +
+            'padding: 4px;' +
+        '}' +
+        '.popupInner {' +
+            'background: none repeat scroll 0 0 #FFFFFF;' +
+            'box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);' +
+            'overflow-x: hidden;' +
+            'overflow-y: auto;' +
+            'width: 500px;' +
+        '}' +
+        '.ipsPad {' +
+            'padding: 9px;' +
+        '}' +
+        '</style>',
+    sTarget: '',
+    sSearch: '',
+    sExpression0: '',
+    sExpression1: ''
+};
+/***
+* User Definition Variables
+***/
+oMTConfig.sErrorMsg = 'Warning!\n\ n An error occurred while editing the title, wait 10 seconds and try again!';
+oMTConfig.sSavingMsg = 'Updating the topic title, wait ...';
+oMTConfig.sDoneMsg = 'The topic title has been updated!';
+ 
+window.onload = function() { //jQuery(function () {
+    if (_userdata.user_level >= 1) {
+        /* Forum versions! */
+        var phpBB2 = jQuery('.bodyline');
+        var phpBB3 = jQuery('#wrap');
+        var punbb = jQuery('#pun-intro');
+        var invision = jQuery('#ipbwrapper');
+        var fa_edge = jQuery('#fa_edge');
+ 
+        if (phpBB2.length) {
+            oMTConfig.sTarget = '.forumline td.row3Right span.postdetails';
+            oMTConfig.sExpression0 = 'oClicked.parent().parent().parent().find("td a.topictitle");';
+            oMTConfig.sExpression1 = 'jQuery("#page-body .forumline .postbody:first", data).parents("tr:eq(1)").attr("id").split("p")[1];'
+        } else if(phpBB3.length) {
+            oMTConfig.sTarget = 'ul.topiclist.topics.bg_none dd.lastpost > span';
+            oMTConfig.sExpression0 = 'oClicked.parent().parents("dl.icon").find("dd.dterm a.topictitle");';
+            oMTConfig.sExpression1 = 'jQuery("#main-content div.post:first", data).attr("id").split("p")[1];';
+        } else if(punbb.length) {
+            oMTConfig.sTarget = '.statused td.tcr';
+            oMTConfig.sExpression0 = 'oClicked.parents("tr").find(".tcl.tdtopics a.topictitle");';
+            oMTConfig.sExpression1 = 'jQuery(".posthead:first", data).attr("id").split("p")[1];';
+        } else if(invision.length) {
+            oMTConfig.sTarget = 'table.ipbtable tbody td.row1.lastaction';
+            oMTConfig.sExpression0 = 'oClicked.parents("tr").find("td a.topictitle");';
+            oMTConfig.sExpression1 = 'jQuery("#main-content .borderwrap .post:first", data).attr("id").split("p")[1];';
+        } else if (fa_edge.length) {
+            oMTConfig.sTarget = 'div.topicslist .forum-lastpost > div';
+            oMTConfig.sExpression0 = 'oClicked.parents(".forum-block").find(".forum-info a.topictitle")';
+            oMTConfig.sExpression1 = 'jQuery("#main-content div.post:first", data).attr("id").split("p")[1]';
+        };
+ 
+        jQuery('head').append(oMTConfig.sCSS);
+        jQuery('body').append( /* oMTConfig.sInfo + */ oMTConfig.sMenu);
+        jQuery(oMTConfig.sTarget).append(oMTConfig.sContent);
+        jQuery('a.ipsModMenu').tooltipster();
+ 
+        jQuery('a.ipsModMenu').click(function () {
+            var oClicked = jQuery(this);
+            var oTarget = jQuery('#topic_mod_menucontent');
+            var oLocked = oClicked.parents('li.row')[0] ? oClicked.parents('li.row').children().first() && oClicked.parents('li.row').children().first().attr('style').indexOf('lock') != -1 : null;
+          
+            oClicked.data('locked', oLocked ? true : false);
+ 
+            if (oTarget[0].style.display == 'none') {
+                oClicked.addClass('menu_active');
+ 
+                oMTConfig.oTopicTitle = eval(oMTConfig.sExpression0);
+                oMTConfig.sTopicHref = oMTConfig.oTopicTitle.attr('href');
+                oMTConfig.iTopicID = oMTConfig.sTopicHref.substring(2, oMTConfig.sTopicHref.indexOf("-")); // .split(/[\/t-]/)[2]; <- More fast???
+                oMTConfig.sTopicTitle = oMTConfig.oTopicTitle.text();
+ 
+                var TID = jQuery('input[name="tid"]').val();
+              
+                jQuery('#t_lock').attr({
+                  'href': '#',
+                  'data-href': oClicked.parents('dl.icon').find('a.topictitle')[0].href
+                }).click(function(e) {
+                    e.preventDefault();
+                    
+                    $.get('/modcp?mode=lock&t=' + oMTConfig.iTopicID  + '&tid=' + TID).done(function() {
+                      var dl = oClicked.parents('dl.icon'),
+                          bg = dl.css('background-image');
+                      
+                      /folder_lock/.test(bg) ? dl.css('background-image', 'url(https://hitsk.in/t/16/73/99/i_folder_lock.png)') : dl.css('background-image', 'url(https://hitsk.in/t/16/73/99/i_folder.png)');
+                    });
+                });
+                jQuery('#t_move').attr('href', '/modcp?mode=move&t=' + oMTConfig.iTopicID  + '&tid=' + TID);
+                jQuery('#t_hide').attr('href', '/modcp?mode=trash&t=' + oMTConfig.iTopicID  + '&tid=' + TID);
+                jQuery('#t_delete').attr('href', '/modcp?mode=delete&t=' + oMTConfig.iTopicID  + '&tid=' + TID);
+              
+                if (oClicked.data('locked') !== false) {
+                  oTarget[0].innerHTML = oTarget[0].innerHTML.replace(/(?!un)lock/ig, function(r) {
+                    return (r[0] == 'L' ? 'Un' : 'un') + r.toLowerCase();
+                  });
+                } else {
+                  oTarget[0].innerHTML = oTarget[0].innerHTML.replace(/un(lock)/ig, function(_, r) {
+                    return (_[0] == 'U' ? 'L' : 'l') + r.substr(1, r.length);
+                  });
+                }
+              
+              oTarget.find('a').removeAttr('title');
+ 
+                oTarget
+                    .css({
+                        'left': (oClicked.offset().left + oClicked.outerWidth()) - oTarget.outerWidth(),
+                        'top': oClicked.offset().top + oClicked.outerHeight()
+                    })
+                    .fadeIn(400);
+ 
+                jQuery(document).mousedown(function() {
+                    if(!oTarget.is(":hover")) {
+                        jQuery(document).unbind('mousedown');
+                        oClicked.removeClass('menu_active');
+                        oTarget.fadeOut(400);
+                    }
+                });
+ 
+            } else {
+                oClicked.removeClass('menu_active');
+                oTarget.fadeOut(400);
+            }
+            return false;
+        });
+    }
+}; // });
+ 
+function _rename_Topic() {
+    oMTConfig.oTopicTitle.hide();
+    var sHtml =
+        '<span id="rename-topic">' +
+         '<input type="text" maxlength="150" size="50" class="input_text" value="' + oMTConfig.sTopicTitle + '" id="rt_input" style="width: 56%; margin-right: 4px;">' +
+            '<input type="submit" id="rt_submit" class="button2" value="Update" onclick="_rt_commit()" style="margin-right: 4px;">' +
+        '<a title="Cancel" class="cancel" id="rt_cancel" href="#">Cancel</a>' +
+      '</span>';
+  
+    if (oMTConfig.oTopicTitle.prev().attr('id') != 'rename-topic') {
+      oMTConfig.oTopicTitle.fadeOut(oMTConfig.sEase);
+      oMTConfig.oTopicTitle.before(sHtml);
+      oMTConfig.oTopicTitle.prev().css('display', 'none').fadeIn(oMTConfig.sEase);
+      
+      jQuery('#rt_cancel').click(function() {
+        jQuery('#rename-topic').fadeOut(oMTConfig.sEase, function() {
+          jQuery('#rename-topic').remove();
+          oMTConfig.oTopicTitle.fadeIn(oMTConfig.sEase);
+        });
+        
+        return false;
+      });
+      
+      jQuery('#rt_input').keydown(function(e){
+          if(e.keyCode == 13 && jQuery('#rt_input').val() !== ''){
+            _rt_commit();
+          }
+      });
+    }
+}
+ 
+function _rt_commit() {
+    var iPostID = 0, user_Msg = '';
+    var sNewTitle = jQuery('#rt_input').val();
+    if (sNewTitle == '') return false;
+ 
+    jQuery('body').append('<div id="ipsGlobalNotification"><div class="popupWrapper"><div class="popupInner"><div class="ipsPad">' + oMTConfig.sSavingMsg + '</div></div></div></div>');
+    jQuery('#ipsGlobalNotification').fadeIn(oMTConfig.sEase);
+    jQuery('#rename-topic').css('opacity', '0.4');
+ 
+    jQuery.get(oMTConfig.sTopicHref, function(data) {
+        iPostID = eval(oMTConfig.sExpression1);
+    }).done(function(){
+        jQuery.get("/post?p=" + iPostID + "&mode=editpost", function(data) {
+            user_Msg = jQuery(data).find('#text_editor_textarea[name="message"]').val();
+        }).done(function(){
+            jQuery.post("/post?p=" + iPostID + "&mode=editpost", {
+                subject: sNewTitle,
+                message: user_Msg,
+                edit_reason: '',
+                attach_sig: '1',
+                notify: "0",
+                post: 1
+            }).done(function(){
+                jQuery('#ipsGlobalNotification').fadeOut(oMTConfig.sEase, function() {
+                  jQuery('#ipsGlobalNotification, #rename-topic').remove();
+                });
+                jQuery('#rename-topic').css('position', 'absolute').hide(oMTConfig.sEase);
+                oMTConfig.oTopicTitle.show(oMTConfig.sEase).text(sNewTitle); //.css('opacity', 0).animate({opacity : 1}, oMTConfig.sEase + 200);
+                jQuery('body').append('<div id="ipsGlobalNotificationComplete"><div class="popupWrapper"><div class="popupInner"><div class="ipsPad">' + oMTConfig.sDoneMsg + '</div></div></div></div>');
+                jQuery('#ipsGlobalNotificationComplete').fadeIn(oMTConfig.sEase);
+                setTimeout(function() {
+                    jQuery('#ipsGlobalNotificationComplete').fadeOut(oMTConfig.sEase);
+                }, 3000);
+            }).fail(function(){
+                jQuery('#ipsGlobalNotification').fadeOut(oMTConfig.sEase);
+                oMTConfig.oTopicTitle.show();
+                alert(oMTConfig.sErrorMsg);
+            });
+        }).fail(function(){
+            jQuery('#ipsGlobalNotification').fadeOut(oMTConfig.sEase);
+            oMTConfig.oTopicTitle.show();
+            alert(oMTConfig.sErrorMsg);
+        });
+    }).fail(function(){
+        jQuery('#ipsGlobalNotification').fadeOut(oMTConfig.sEase);
+        oMTConfig.oTopicTitle.show();
+        alert(oMTConfig.sErrorMsg);
+    });
+}
+
+/* 03 - Attention GenociDe in Applications section */
+
+/\/f(?:3|8|29)[p]?\d*-/.test(location.href) && $(function() {
+  $('.announcement li.row').each(function() {
+    if (/net\sneutrality/i.test($(this).find('.topictitle').text())) return true;
+    if (/attention\sgenocide/i.test($(this).find('dd.dterm').text())) $(this).remove();
+  });
+});
