@@ -1,0 +1,140 @@
+(function() {
+  if (window.faGroupMentions) return;
+
+  window.faGroupMentions = {
+    groups: [1, 4, 12, 3, 13, 11, 8],
+    cacheTime: 1, // time in hours to cache data
+
+    storage: window.localStorage,
+
+    getMembers: function() {
+      if (!faGroupMentions.storage) {
+        console.warn('Get localStorage motherfucker. This plugin won\'t work without it.');
+        return;
+      }
+
+      if (faGroupMentions.storage.groupMembers && faGroupMentions.storage.groupMembers.exp > new Date().getTime() - faGroupMentions.cacheTime * 60 * 60 * 1000) return;
+
+      var groups = {},
+          index = location.pathname == '/',
+          name = 'N/A',
+          color = '#',
+          href = '/',
+          g = 0;
+
+      for (; g < faGroupMentions.groups.length; g++) {
+        $.ajax({
+          url: index ? '/' : 'http://pb2genocide.forumotion.com/',
+          type: 'get',
+          async: false,
+          success: function(d) {
+            name = $('[href*="/g' + faGroupMentions.groups[g] + '-"]', d).html();
+
+            if (name != undefined && name != 'null') {
+              color = $('[href*="/g' + faGroupMentions.groups[g] + '-"]', d).attr('style').replace(/.*color:\s(#.{6}).*/, '$1');
+              href = $('[href*="/g' + faGroupMentions.groups[g] + '-"]', d).attr('href');
+            }
+          }
+        });
+
+        groups[name] = {
+          'color': color,
+          'href': href,
+          'members': []
+        };
+        
+
+        $.ajax({
+          url: groups[name].href,
+          type: 'get',
+          async: false,
+          success: function(d) {
+            var next_page = 'a[href*="?start"] ~ a.pag-img',
+                number_of_pages,
+                url,
+                p,
+                n = 1;
+
+            $('form a[href^="/u"] strong', d).each(function() {
+              groups[name].members.push(this.innerHTML);
+            });
+            
+
+            if ($(next_page, d)[0] && !/non-/i.test(name)) {
+              number_of_pages = Number($('a[href*="Pagination"]', d).parent().find('a[href*="?start"]').filter(function() {
+                return !this.firstElementChild
+              }).last().text());
+              
+              url = $(next_page, d)[0].href;
+
+              for (; n < number_of_pages; n++) {
+                p = 'page_' + n;
+                $.ajax({
+                  url: url,
+                  type: 'get',
+                  async: false,
+                  success: function(p) {
+                    $('form a[href^="/u"] strong', p).slice(1).each(function() {
+                      groups[name].members.push(this.innerHTML);
+                    });
+
+                    if ($(next_page, p)[0]) url = $(next_page, p)[0].href;
+                  }
+                });
+              }
+            }
+            // end of pages search
+          }
+        });
+      }
+
+      delete groups.null;
+      
+      faGroupMentions.storage.groupMembers = JSON.stringify({
+        list: groups,
+        exp: new Date().getTime()
+      });
+    },
+
+    parseMentions: function() {
+      if (!/\/t\d+|\/post/.test(location.href) || !faGroupMentions.storage.groupMembers) return;
+    
+      var groups = JSON.parse(faGroupMentions.storage.groupMembers).list,
+          group_id,
+          members,
+          g, r, m, i, v, s;
+    
+      if (document.getElementsByClassName('postbody')[0]) {
+        $('.postbody .content').each(function() {
+          for (g in groups) {
+            group_id = groups[g].href.replace(/\/g(\d+)-.*/, '$1');
+            r = new RegExp('@"?' + g + '"?', 'ig');
+            this.innerHTML = this.innerHTML.replace(r, '<a href="' + groups[g].href + '" rel="nofollow" group-id="' + group_id + '" class="mentiontag" style="color: ' + groups[g].color + '">@' + g + '</a>');
+          }
+        });
+      }
+      
+      if ($.sceditor) {
+        $('form[action="/post"]').submit(function() {
+          i = $(this).find('#text_editor_textarea').sceditor('instance');
+          v = i.val();
+          
+          for (g in groups) {
+            group_id = groups[g].href.replace(/\/g(\d+)-.*/, '$1');
+            members = groups[g].members;
+            r = new RegExp('(@"?' + g + '"?)', 'i');
+
+            if (r.test(v)) {
+              s = '';
+              for (m = 0; m < members.length; m++) s += (m == 0 ? '' : ' ') + '@\"' + members[m] + '\"';
+              s = v.replace(r, '$1[size=0]' + s + '[/size]');
+              i.val(s);
+            }
+          }
+          
+          return false;
+        });
+      }
+    }
+  }
+})();
