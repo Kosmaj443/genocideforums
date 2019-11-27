@@ -1,0 +1,3 @@
+(function() {
+  document.write('<style type="text/css" name="sleek-edges">.postprofile dt > a:first-child, #cp-main .panel { border-radius: 0; } .post, .forabg, .forumbg, .panel, .navbar, .module, #logo-desc, .sceditor-container, .sceditor-toolbar, #tabs li:not(.activetab) a span { border: 1px solid #333; border-radius: 0; } input, textarea { border-radius: 0 !important; }</style>');
+})();
