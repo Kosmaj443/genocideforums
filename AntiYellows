@@ -1,0 +1,36 @@
+/* Homepage */
+(function() {
+  $('meta[name] + link[rel="stylesheet"]').attr('href', 'https://genocideclan.forumotion.com/1-ltr.css');
+  $('head').append('<style>.blast { padding: 0 !important; display: inline-block !important; }a[href^="/u"] span strong,a[href^="/u"] span strong span{color:#999!important;background:0 0!important}a[href^="/u"] span strong:hover,a[href^="/u"] span strong:hover span{}a[href^="/u"] span strong .blast:after,a[href^="/u"] span strong .blast:before{display:none!important}</style>');
+  $(function() {
+    $('a[href^="/u"]:has(span strong)').tooltipster('destroy').removeAttr('title');
+    $('#wio_groups b').filter(function() { return !/non-member/i.test(this.innerHTML) }).remove();
+    $('#who_is_online').remove();
+  });
+  
+  // $('head').append('<link rel="stylesheet" href="https://genocideclan.forumotion.com/1-ltr.css" />');
+  // if (localStorage.stylesheetBoi == 5) {
+  // }
+})();
+
+/* 1st way 
+var forum = /f\d+/.test(location.href),
+	h = forum ? '<div class="panel"><div class="inner"><span class="corners-top"><span></span></span><h1 class="page-title">Information</h1><p>The forum you selected does not exist.</p><span class="corners-bottom"><span></span></span></div></div>' : '<div class="panel"><div class="inner"><span class="corners-top"><span></span></span><h1 class="page-title">Information</h1><p>Sorry, but only <strong>users granted special access</strong> can read topics in this forum.</p><span class="corners-bottom"><span></span></span></div></div>';
+
+$('#main-content .page-title').before(h).nextAll().andSelf().remove();
+if (!forum) $('#main-content').contents().filter(function() { return this.nodeType == 3 }).remove();
+
+$('title')[0].innerHTML = 'Information';
+
+
+*****************************************************************************
+
+*****************************************************************************
+
+ * 2nd way
+
+var forum = /f\d+/.test(location.href);
+
+location.href = forum ? '/f35-admin-testing' : '/t1849-dead-topic';
+
+*/
